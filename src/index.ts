@@ -30,6 +30,20 @@ const yarnErrorCatcher = (error: execa.ExecaError<string>) => {
 // Initialize cleanup function
 let cleanup = () => {};
 
+// Initialize object to store the final result
+interface FinalResult {
+	errorEncountered: boolean;
+	failedTests: {
+		project: string;
+		output: string;
+	}[];
+}
+
+const finalResult: FinalResult = {
+	errorEncountered: false,
+	failedTests: [],
+};
+
 // Wrap everything in a self-executing async function
 (async () => {
 	// Build the configuration
@@ -71,14 +85,19 @@ let cleanup = () => {};
 		// Section header
 		console.log(`\n${chalk.inverse(chalk.bold(` Resetting test projects `))}\n`);
 
-		// Remove packaged copies
-		const removeTasks = new Listr(
+		// Remove packaged version and add linked version
+		const tasks = new Listr(
 			testProjectPaths.map((testProjectPath) => ({
-				title: `Removing packaged copy from project: ${path.basename(testProjectPath)}`,
-				task: () =>
-					execa('yarn', [`remove`, packageFile.name], {
+				title: path.basename(testProjectPath),
+				task: async () => {
+					await execa('yarn', [`remove`, packageFile.name], {
 						cwd: testProjectPath,
-					}).catch(yarnErrorCatcher),
+					}).catch(yarnErrorCatcher);
+
+					await execa('yarn', [`add`, `link:../..`], {
+						cwd: testProjectPath,
+					}).catch(yarnErrorCatcher);
+				},
 			})),
 			{
 				concurrent: true,
@@ -86,37 +105,34 @@ let cleanup = () => {};
 			}
 		);
 
-		await removeTasks.run();
+		await tasks.run();
 
-		// Remove packaged copies
-		const addTasks = new Listr(
-			testProjectPaths.map((testProjectPath) => ({
-				title: `Adding linked copy to project: ${path.basename(testProjectPath)}`,
-				task: () =>
-					execa('yarn', [`add`, `link:../..`], {
-						cwd: testProjectPath,
-					}).catch(yarnErrorCatcher),
-			})),
-			{
-				concurrent: true,
-				exitOnError: false,
-			}
-		);
+		// Loop over each failed test
+		for (const failedTest of finalResult.failedTests) {
+			// Section header
+			console.log(`\n${chalk.inverse(chalk.red(chalk.bold(` Output from: ${failedTest.project} `)))}\n`);
 
-		await addTasks.run();
+			// Print output
+			console.log(failedTest.output.trim());
+		}
 
 		// Final newline
 		console.log();
+
+		// Exit accordingly
+		if (finalResult.errorEncountered || finalResult.failedTests.length) {
+			process.exit(1);
+		}
 	};
 
 	// Section header
-	console.log(`\n${chalk.inverse(chalk.bold(` Installing dependencies `))}\n`);
+	console.log(`${chalk.inverse(chalk.bold(` Installing dependencies `))}\n`);
 
 	// Set up the tasks
 	const dependenciesTasks = new Listr(
 		[
 			{
-				title: `Root project`,
+				title: packageFile.name,
 				task: () => execa('yarn', [`install`, `--frozen-lockfile`, `--prefer-offline`]).catch(yarnErrorCatcher),
 			},
 			...testProjectPaths.map((testProjectPath) => ({
@@ -145,28 +161,25 @@ let cleanup = () => {};
 	// Set up the tasks
 	const injectingTasks = new Listr([
 		{
-			title: 'Compiling root project',
+			title: `Compiling ${packageFile.name}`,
 			task: () => execa('yarn', ['compile']).catch(yarnErrorCatcher),
 		},
 		{
-			title: 'Creating temporary directory',
+			title: `Packaging ${packageFile.name}`,
 			task: (ctx) => {
 				ctx.tmpDir = tmp.dirSync({
 					unsafeCleanup: true,
 				});
+
+				return execa('yarn', [`pack`, `--filename`, path.join(ctx.tmpDir.name, 'package.tgz')]).catch(yarnErrorCatcher);
 			},
-		},
-		{
-			title: 'Packaging root project',
-			task: (ctx) =>
-				execa('yarn', [`pack`, `--filename`, path.join(ctx.tmpDir.name, 'package.tgz')]).catch(yarnErrorCatcher),
 		},
 		{
 			title: 'Injecting into projects',
 			task: (ctx) =>
 				new Listr(
 					testProjectPaths.map((testProjectPath) => ({
-						title: `Project: ${path.basename(testProjectPath)}`,
+						title: path.basename(testProjectPath),
 						task: () =>
 							execa('yarn', [`add`, `file:${path.join(ctx.tmpDir.name, 'package.tgz')}`], {
 								cwd: testProjectPath,
@@ -177,26 +190,55 @@ let cleanup = () => {};
 					}
 				),
 		},
-		{
-			title: 'Removing the temporary directory',
-			task: (ctx) => ctx.tmpDir.removeCallback(),
-		},
 	]);
 
 	// Run the tasks, catching any errors
 	await injectingTasks.run().catch((error) => {
-		if (error.context?.tmpDir) {
-			error.context.tmpDir.removeCallback();
-		}
-
 		console.log();
+		throw new HandledError();
+	});
+
+	// Section header
+	console.log(`\n${chalk.inverse(chalk.bold(` Testing projects `))}\n`);
+
+	// Set up the tasks
+	const testingTasks = new Listr(
+		testProjectPaths.map((testProjectPath) => ({
+			title: path.basename(testProjectPath),
+			task: () =>
+				execa('yarn', [`test`], {
+					cwd: testProjectPath,
+					all: true,
+				}).catch((error) => {
+					// Add to final result
+					finalResult.failedTests.push({
+						project: path.basename(testProjectPath),
+						output: error.all ?? 'No output...',
+					});
+
+
+					// Throw error that Listr will pick up
+					throw new Error('Output will be printed below');
+				}),
+		})),
+		{
+			concurrent: true,
+			exitOnError: false,
+		}
+	);
+
+	// Run the tasks, catching any errors
+	await testingTasks.run().catch((error) => {
 		throw new HandledError();
 	});
 })()
 	.catch((error) => {
+		// Remember that we encountered an error
+		finalResult.errorEncountered = true;
+
 		// Catch already-handled errors
 		if (error instanceof HandledError) {
-			process.exit(1);
+			return;
 		}
 
 		// Handle unexpected errors
