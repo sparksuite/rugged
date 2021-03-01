@@ -38,7 +38,6 @@ export default async function testProjects(testProjectPaths: string[], finalResu
 
 	// Run the tasks, catching any errors
 	await tasks.run().catch(() => {
-		console.log();
 		throw new HandledError();
 	});
 }
