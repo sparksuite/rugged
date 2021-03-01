@@ -29,7 +29,23 @@ export default async function injectRootPackage(packageFile: PackageFile, testPr
 			},
 		},
 		{
-			title: 'Injecting',
+			title: 'Removing linked version',
+			task: () =>
+				new Listr(
+					testProjectPaths.map((testProjectPath) => ({
+						title: path.basename(testProjectPath),
+						task: () =>
+							execa('yarn', [`remove`, packageFile.name], {
+								cwd: testProjectPath,
+							}).catch(yarnErrorCatcher),
+					})),
+					{
+						concurrent: true,
+					}
+				),
+		},
+		{
+			title: 'Injecting packaged version',
 			task: (ctx) =>
 				new Listr(
 					testProjectPaths.map((testProjectPath) => ({
