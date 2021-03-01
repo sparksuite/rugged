@@ -41,6 +41,7 @@ export default async function injectRootPackage(packageFile: PackageFile, testPr
 					})),
 					{
 						concurrent: true,
+						exitOnError: false,
 					}
 				),
 		},
@@ -57,6 +58,7 @@ export default async function injectRootPackage(packageFile: PackageFile, testPr
 					})),
 					{
 						concurrent: true,
+						exitOnError: false,
 					}
 				),
 		},
