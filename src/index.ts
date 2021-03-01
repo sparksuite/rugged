@@ -59,7 +59,7 @@ const finalResult: FinalResult = {
 						if (error.toString().includes(`This module isn't specified in a package.json file`)) {
 							return;
 						}
-						
+
 						return yarnErrorCatcher(error);
 					});
 

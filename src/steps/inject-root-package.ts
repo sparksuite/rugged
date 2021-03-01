@@ -21,11 +21,13 @@ export default async function injectRootPackage(packageFile: PackageFile, testPr
 		{
 			title: `Packaging`,
 			task: (ctx) => {
-				ctx.tmpDir = tmp.dirSync({
+				const tmpDir = tmp.dirSync({
 					unsafeCleanup: true,
 				});
 
-				return execa('yarn', [`pack`, `--filename`, path.join(ctx.tmpDir.name, 'package.tgz')]).catch(yarnErrorCatcher);
+				ctx.packagePath = path.join(tmpDir.name, `package-${Math.random().toString(36).substring(7)}.tgz`);
+
+				return execa('yarn', [`pack`, `--filename`, ctx.packagePath]).catch(yarnErrorCatcher);
 			},
 		},
 		{
@@ -34,16 +36,21 @@ export default async function injectRootPackage(packageFile: PackageFile, testPr
 				new Listr(
 					testProjectPaths.map((testProjectPath) => ({
 						title: path.basename(testProjectPath),
-						task: () =>
-							execa('yarn', [`remove`, packageFile.name], {
+						task: async () => {
+							await execa('yarn', [`remove`, packageFile.name], {
 								cwd: testProjectPath,
 							}).catch((error) => {
 								if (error.toString().includes(`This module isn't specified in a package.json file`)) {
 									return;
 								}
-								
+
 								return yarnErrorCatcher(error);
-							}),
+							});
+
+							await execa('yarn', [`unlink`, packageFile.name], {
+								cwd: testProjectPath,
+							}).catch(yarnErrorCatcher);
+						},
 					})),
 					{
 						concurrent: true,
@@ -58,7 +65,7 @@ export default async function injectRootPackage(packageFile: PackageFile, testPr
 					testProjectPaths.map((testProjectPath) => ({
 						title: path.basename(testProjectPath),
 						task: () =>
-							execa('yarn', [`add`, `file:${path.join(ctx.tmpDir.name, 'package.tgz')}`], {
+							execa('yarn', [`add`, `file:${ctx.packagePath}`], {
 								cwd: testProjectPath,
 							}).catch(yarnErrorCatcher),
 					})),
