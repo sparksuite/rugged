@@ -37,7 +37,13 @@ export default async function injectRootPackage(packageFile: PackageFile, testPr
 						task: () =>
 							execa('yarn', [`remove`, packageFile.name], {
 								cwd: testProjectPath,
-							}).catch(yarnErrorCatcher),
+							}).catch((error) => {
+								if (error.toString().includes(`This module isn't specified in a package.json file`)) {
+									return;
+								}
+								
+								return yarnErrorCatcher(error);
+							}),
 					})),
 					{
 						concurrent: true,

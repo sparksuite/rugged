@@ -55,7 +55,13 @@ const finalResult: FinalResult = {
 				task: async () => {
 					await execa('yarn', [`remove`, packageFile.name], {
 						cwd: testProjectPath,
-					}).catch(yarnErrorCatcher);
+					}).catch((error) => {
+						if (error.toString().includes(`This module isn't specified in a package.json file`)) {
+							return;
+						}
+						
+						return yarnErrorCatcher(error);
+					});
 
 					await execa('yarn', [`add`, `link:../..`], {
 						cwd: testProjectPath,
