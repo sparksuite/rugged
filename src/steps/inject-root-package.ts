@@ -54,7 +54,13 @@ export default async function injectRootPackage(
 
 							await execa('yarn', [`--mutex`, `file:${configuration.yarnMutexFilePath}`, `unlink`, packageFile.name], {
 								cwd: testProjectPath,
-							}).catch(yarnErrorCatcher);
+							}).catch((error) => {
+								if (error.toString().includes(`No registered package found called`)) {
+									return;
+								}
+
+								return yarnErrorCatcher(error);
+							});
 						},
 					})),
 					{
