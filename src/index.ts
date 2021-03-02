@@ -53,7 +53,7 @@ const finalResult: FinalResult = {
 			testProjectPaths.map((testProjectPath) => ({
 				title: path.basename(testProjectPath),
 				task: async () => {
-					await execa('yarn', [`remove`, packageFile.name], {
+					await execa('yarn', [`--mutex`, `file:${configuration.yarnMutexFilePath}`, `remove`, packageFile.name], {
 						cwd: testProjectPath,
 					}).catch((error) => {
 						if (error.toString().includes(`This module isn't specified in a package.json file`)) {
@@ -95,8 +95,8 @@ const finalResult: FinalResult = {
 	};
 
 	// Trigger each step
-	await installDependencies(packageFile, testProjectPaths);
-	await injectRootPackage(packageFile, testProjectPaths);
+	await installDependencies(configuration, packageFile, testProjectPaths);
+	await injectRootPackage(configuration, packageFile, testProjectPaths);
 	await testProjects(testProjectPaths, finalResult);
 })()
 	.catch((error) => {
