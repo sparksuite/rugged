@@ -1,3 +1,6 @@
+// Imports
+import tmp from 'tmp';
+
 // Define what configuration looks like
 export interface Configuration {
 	testProjectsDirectory: string;
@@ -9,6 +12,6 @@ export default async function configure(): Promise<Configuration> {
 	// Return
 	return {
 		testProjectsDirectory: 'test-projects',
-		yarnMutexFilePath: '/tmp/.yarn-mutex', // TODO: Make random
+		yarnMutexFilePath: tmp.fileSync().name,
 	};
 }
