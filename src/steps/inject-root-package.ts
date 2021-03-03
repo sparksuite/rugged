@@ -76,7 +76,7 @@ export default async function injectRootPackage(
 					testProjectPaths.map((testProjectPath) => ({
 						title: path.basename(testProjectPath),
 						task: () =>
-							execa('yarn', [`--mutex`, `file:${configuration.yarnMutexFilePath}`, `add`, `file:${ctx.packagePath}`], {
+							execa('yarn', [`--mutex`, `file:${configuration.yarnMutexFilePath}`, `add`, configuration.injectAsDevDependency ? `--dev` : '', `file:${ctx.packagePath}`], {
 								cwd: testProjectPath,
 							}).catch(yarnErrorCatcher),
 					})),
