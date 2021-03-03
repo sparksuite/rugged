@@ -2,7 +2,7 @@
 
 // Imports
 import path from 'path';
-import chalk from 'chalk';
+import chalk from './utils/chalk';
 import glob from 'glob';
 import Listr from 'listr';
 import execa from 'execa';
