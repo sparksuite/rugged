@@ -8,6 +8,9 @@ import { HandledError } from './errors';
 // Define what a package file should look like
 export interface PackageFile {
 	name: string;
+	scripts?: {
+		[script: string]: string;
+	};
 }
 
 /** Helper functions for verifying things */
