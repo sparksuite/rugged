@@ -22,24 +22,16 @@ export default async function installDependencies(
 			{
 				title: packageFile.name,
 				task: () =>
-					execa('yarn', [
-						`--mutex`,
-						`file:${configuration.yarnMutexFilePath}`,
-						`install`,
-						`--frozen-lockfile`,
-						`--prefer-offline`,
-					]).catch(yarnErrorCatcher),
+					execa('yarn', [`--mutex`, `file:${configuration.yarnMutexFilePath}`, `install`, `--prefer-offline`]).catch(
+						yarnErrorCatcher
+					),
 			},
 			...testProjectPaths.map((testProjectPath) => ({
 				title: `Project: ${path.basename(testProjectPath)}`,
 				task: () =>
-					execa(
-						'yarn',
-						[`--mutex`, `file:${configuration.yarnMutexFilePath}`, `install`, `--frozen-lockfile`, `--prefer-offline`],
-						{
-							cwd: testProjectPath,
-						}
-					).catch(yarnErrorCatcher),
+					execa('yarn', [`--mutex`, `file:${configuration.yarnMutexFilePath}`, `install`, `--prefer-offline`], {
+						cwd: testProjectPath,
+					}).catch(yarnErrorCatcher),
 			})),
 		],
 		{
