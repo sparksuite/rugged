@@ -15,7 +15,7 @@ import injectRootPackage from './steps/inject-root-package';
 import testProjects from './steps/test-projects';
 
 // Initialize finish function
-let finishUp = () => {};
+let finishUp = () => Promise.resolve();
 
 // Initialize object to store the final result
 export interface FinalResult {
