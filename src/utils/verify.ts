@@ -36,6 +36,11 @@ const verify = {
 			throw new HandledError();
 		}
 
+		if (typeof parsedFile.version !== 'string') {
+			console.log(chalk.red(`\nThe ${chalk.bold('package.json')} is missing a version\n`));
+			throw new HandledError();
+		}
+
 		return parsedFile;
 	},
 

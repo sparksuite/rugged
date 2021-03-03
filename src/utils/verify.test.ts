@@ -34,11 +34,23 @@ describe('#verify.packageFile()', () => {
 		expect(console.log).toHaveBeenCalledWith(expect.stringMatching(/The package.json is missing a name/));
 	});
 
+	it('Catches package files that are missing a version', () => {
+		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'package-missing-version'));
+
+		expect(() => {
+			verify.packageFile();
+		}).toThrow(HandledError);
+
+		expect(console.log).toHaveBeenCalledTimes(1);
+		expect(console.log).toHaveBeenCalledWith(expect.stringMatching(/The package.json is missing a version/));
+	});
+
 	it('Returns parsed version', () => {
 		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'primary'));
 
 		expect(verify.packageFile()).toStrictEqual({
 			name: 'primary',
+			version: '1.2.3',
 		});
 	});
 });
