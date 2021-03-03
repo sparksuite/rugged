@@ -1,0 +1,11 @@
+{
+	"scripts": {
+		"test": "node index.js"
+	},
+	"dependencies": {
+		"typescript-project": "link:../.."
+	},
+	"devDependencies": {
+		"javascript-project": "link:../.."
+	}
+}
