@@ -2,7 +2,7 @@
 
 // Imports
 import path from 'path';
-import chalk from 'chalk';
+import chalk from './utils/chalk';
 import glob from 'glob';
 import Listr from 'listr';
 import execa from 'execa';
@@ -15,7 +15,7 @@ import injectRootPackage from './steps/inject-root-package';
 import testProjects from './steps/test-projects';
 
 // Initialize finish function
-let finishUp = () => {};
+let finishUp = () => Promise.resolve();
 
 // Initialize object to store the final result
 export interface FinalResult {

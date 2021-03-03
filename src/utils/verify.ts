@@ -1,7 +1,7 @@
 // Imports
 import path from 'path';
 import fs from 'fs';
-import chalk from 'chalk';
+import chalk from './chalk';
 import { Configuration } from './configure';
 import { HandledError } from './errors';
 
@@ -13,11 +13,13 @@ export interface PackageFile {
 /** Helper functions for verifying things */
 const verify = {
 	/** Make sure package file exists and it has a name */
-	packageFile(): PackageFile {
-		const packageFilePath = path.join(process.cwd(), 'package.json');
+	packageFile(cwd?: string): PackageFile {
+		const packageFilePath = path.join(cwd ?? process.cwd(), 'package.json');
 
 		if (!fs.existsSync(packageFilePath)) {
-			console.log(chalk.red(`\nCouldn’t find ${chalk.bold('package.json')} in this directory (${process.cwd()})\n`));
+			console.log(
+				chalk.red(`\nCouldn’t find ${chalk.bold('package.json')} in this directory (${cwd ?? process.cwd()})\n`)
+			);
 			throw new HandledError();
 		}
 
@@ -37,15 +39,15 @@ const verify = {
 	},
 
 	/** Verify that the test projects exist */
-	testProjects(configuration: Configuration): string {
-		const absolutePath = path.join(process.cwd(), configuration.testProjectsDirectory);
+	testProjects(configuration: Configuration, cwd?: string): string {
+		const absolutePath = path.join(cwd ?? process.cwd(), configuration.testProjectsDirectory);
 
 		if (!fs.existsSync(absolutePath)) {
 			console.log(
 				chalk.red(
-					`\nCouldn’t find ${chalk.bold(
-						`./${configuration.testProjectsDirectory}/`
-					)} in this directory (${process.cwd()})\n`
+					`\nCouldn’t find ${chalk.bold(`./${configuration.testProjectsDirectory}/`)} in this directory (${
+						cwd ?? process.cwd()
+					})\n`
 				)
 			);
 
