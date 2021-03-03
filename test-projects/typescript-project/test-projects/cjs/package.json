@@ -1,0 +1,9 @@
+{
+	"scripts": {
+		"test": "node index.js"
+	},
+	"dependencies": {},
+	"devDependencies": {
+		"typescript-project": "link:../.."
+	}
+}
