@@ -63,7 +63,7 @@ const finalResult: FinalResult = {
 						return yarnErrorCatcher(error);
 					});
 
-					await execa('yarn', [`add`, `link:../..`], {
+					await execa('yarn', [`add`, configuration.injectAsDevDependency ? `--dev` : '', `link:../..`], {
 						cwd: testProjectPath,
 					}).catch(yarnErrorCatcher);
 				},
