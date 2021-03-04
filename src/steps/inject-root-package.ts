@@ -84,7 +84,7 @@ export default async function injectRootPackage(packageFile: PackageFile, testPr
 									`add`,
 									config.injectAsDevDependency ? `--dev` : '',
 									`file:${ctx.packagePath}`,
-								],
+								].filter((arg) => !!arg),
 								{
 									cwd: testProjectPath,
 								}

@@ -67,9 +67,13 @@ const finalResult: FinalResult = {
 						return yarnErrorCatcher(error);
 					});
 
-					await execa('yarn', [`add`, config.injectAsDevDependency ? `--dev` : '', `link:../..`], {
-						cwd: testProjectPath,
-					}).catch(yarnErrorCatcher);
+					await execa(
+						'yarn',
+						[`add`, config.injectAsDevDependency ? `--dev` : '', `link:../..`].filter((arg) => !!arg),
+						{
+							cwd: testProjectPath,
+						}
+					).catch(yarnErrorCatcher);
 				},
 			})),
 			{
