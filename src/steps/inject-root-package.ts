@@ -6,16 +6,15 @@ import { HandledError, yarnErrorCatcher } from '../utils/errors';
 import printHeader from '../utils/print-header';
 import { PackageFile } from '../utils/verify';
 import tmp from 'tmp';
-import { Configuration } from '../utils/configure';
+import getConfig from '../utils/get-config';
 
 /** Installs dependencies into the root project and test projects */
-export default async function injectRootPackage(
-	configuration: Configuration,
-	packageFile: PackageFile,
-	testProjectPaths: string[]
-) {
+export default async function injectRootPackage(packageFile: PackageFile, testProjectPaths: string[]) {
 	// Print section header
 	printHeader(`Injecting ${packageFile.name}`);
+
+	// Get config
+	const config = await getConfig();
 
 	// Set up the tasks
 	const tasks = new Listr([
@@ -43,7 +42,7 @@ export default async function injectRootPackage(
 					testProjectPaths.map((testProjectPath) => ({
 						title: path.basename(testProjectPath),
 						task: async () => {
-							await execa('yarn', [`--mutex`, `file:${configuration.yarnMutexFilePath}`, `remove`, packageFile.name], {
+							await execa('yarn', [`--mutex`, `file:${config.yarnMutexFilePath}`, `remove`, packageFile.name], {
 								cwd: testProjectPath,
 							}).catch((error) => {
 								if (error.toString().includes(`This module isn't specified in a package.json file`)) {
@@ -53,7 +52,7 @@ export default async function injectRootPackage(
 								return yarnErrorCatcher(error);
 							});
 
-							await execa('yarn', [`--mutex`, `file:${configuration.yarnMutexFilePath}`, `unlink`, packageFile.name], {
+							await execa('yarn', [`--mutex`, `file:${config.yarnMutexFilePath}`, `unlink`, packageFile.name], {
 								cwd: testProjectPath,
 							}).catch((error) => {
 								if (error.toString().includes(`No registered package found called`)) {
@@ -81,9 +80,9 @@ export default async function injectRootPackage(
 								'yarn',
 								[
 									`--mutex`,
-									`file:${configuration.yarnMutexFilePath}`,
+									`file:${config.yarnMutexFilePath}`,
 									`add`,
-									configuration.injectAsDevDependency ? `--dev` : '',
+									config.injectAsDevDependency ? `--dev` : '',
 									`file:${ctx.packagePath}`,
 								],
 								{

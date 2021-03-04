@@ -2,7 +2,7 @@
 import path from 'path';
 import fs from 'fs';
 import chalk from './chalk';
-import { Configuration } from './configure';
+import { Config } from './get-config';
 import { HandledError } from './errors';
 
 // Define what a package file should look like
@@ -45,15 +45,13 @@ const verify = {
 	},
 
 	/** Verify that the test projects exist */
-	testProjects(configuration: Configuration): string {
-		const absolutePath = path.join(process.cwd(), configuration.testProjectsDirectory);
+	testProjects(config: Config): string {
+		const absolutePath = path.join(process.cwd(), config.testProjectsDirectory);
 
 		if (!fs.existsSync(absolutePath)) {
 			console.log(
 				chalk.red(
-					`\nCouldn’t find ${chalk.bold(
-						`./${configuration.testProjectsDirectory}/`
-					)} in this directory (${process.cwd()})\n`
+					`\nCouldn’t find ${chalk.bold(`./${config.testProjectsDirectory}/`)} in this directory (${process.cwd()})\n`
 				)
 			);
 

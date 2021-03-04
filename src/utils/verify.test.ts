@@ -2,7 +2,7 @@
 import verify from './verify';
 import path from 'path';
 import { HandledError } from './errors';
-import configure from './configure';
+import getConfig from './get-config';
 
 // Mock the log function
 console.log = jest.fn();
@@ -59,10 +59,10 @@ describe('#verify.testProjects()', () => {
 	it('Catches missing package files', async () => {
 		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'missing-test-projects'));
 
-		const configuration = await configure();
+		const config = await getConfig();
 
 		expect(() => {
-			verify.testProjects(configuration);
+			verify.testProjects(config);
 		}).toThrow(HandledError);
 
 		expect(console.log).toHaveBeenCalledTimes(1);
@@ -74,8 +74,8 @@ describe('#verify.testProjects()', () => {
 	it('Returns absolute path', async () => {
 		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'primary'));
 
-		const configuration = await configure();
+		const config = await getConfig();
 
-		expect(verify.testProjects(configuration)).toMatch(/\/rugged\/test\-file\-trees\/primary\/test\-projects$/);
+		expect(verify.testProjects(config)).toMatch(/\/rugged\/test\-file\-trees\/primary\/test\-projects$/);
 	});
 });

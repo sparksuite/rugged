@@ -7,12 +7,16 @@ import glob from 'glob';
 import Listr from 'listr';
 import execa from 'execa';
 import { HandledError, yarnErrorCatcher } from './utils/errors';
-import configure from './utils/configure';
+import getConfig, { Config } from './utils/get-config';
 import verify from './utils/verify';
 import printHeader from './utils/print-header';
 import installDependencies from './steps/install-dependencies';
 import injectRootPackage from './steps/inject-root-package';
 import testProjects from './steps/test-projects';
+
+// Export a type used for TypeScript config files
+type PartialConfig = Partial<Config>;
+export type { PartialConfig as Config };
 
 // Initialize finish function
 let finishUp = () => Promise.resolve();
@@ -33,12 +37,12 @@ const finalResult: FinalResult = {
 
 // Wrap everything in a self-executing async function
 (async () => {
-	// Get the configuration
-	const configuration = await configure();
+	// Get the config
+	const config = await getConfig();
 
 	// Verification
 	const packageFile = verify.packageFile();
-	const absolutePath = verify.testProjects(configuration);
+	const absolutePath = verify.testProjects(config);
 
 	// Determine test project paths
 	const testProjectPaths = glob.sync(`${absolutePath}/*/`);
@@ -53,7 +57,7 @@ const finalResult: FinalResult = {
 			testProjectPaths.map((testProjectPath) => ({
 				title: path.basename(testProjectPath),
 				task: async () => {
-					await execa('yarn', [`--mutex`, `file:${configuration.yarnMutexFilePath}`, `remove`, packageFile.name], {
+					await execa('yarn', [`--mutex`, `file:${config.yarnMutexFilePath}`, `remove`, packageFile.name], {
 						cwd: testProjectPath,
 					}).catch((error) => {
 						if (error.toString().includes(`This module isn't specified in a package.json file`)) {
@@ -63,7 +67,7 @@ const finalResult: FinalResult = {
 						return yarnErrorCatcher(error);
 					});
 
-					await execa('yarn', [`add`, configuration.injectAsDevDependency ? `--dev` : '', `link:../..`], {
+					await execa('yarn', [`add`, config.injectAsDevDependency ? `--dev` : '', `link:../..`], {
 						cwd: testProjectPath,
 					}).catch(yarnErrorCatcher);
 				},
@@ -95,8 +99,8 @@ const finalResult: FinalResult = {
 	};
 
 	// Trigger each step
-	await installDependencies(configuration, packageFile, testProjectPaths);
-	await injectRootPackage(configuration, packageFile, testProjectPaths);
+	await installDependencies(packageFile, testProjectPaths);
+	await injectRootPackage(packageFile, testProjectPaths);
 	await testProjects(testProjectPaths, finalResult);
 })()
 	.catch((error) => {
