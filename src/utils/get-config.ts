@@ -23,9 +23,9 @@ export interface Config {
 let config: Config | undefined = undefined;
 
 /** Construct the config object */
-export default async function getConfig(): Promise<Config> {
-	// Return already constructed version
-	if (typeof config === 'object') {
+export default async function getConfig(reconstruct?: true): Promise<Config> {
+	// Return already constructed version, if possible
+	if (typeof config === 'object' && reconstruct !== true) {
 		return config;
 	}
 
@@ -67,7 +67,7 @@ export default async function getConfig(): Promise<Config> {
 	}
 
 	// Handle the custom config
-	if (customConfig) {
+	if (configFilename) {
 		// Make sure it's an object
 		if (typeof customConfig !== 'object' || customConfig === null) {
 			throw new PrintableError(`The ${chalk.bold(configFilename)} file doesn’t export an object`);
