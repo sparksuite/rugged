@@ -10,7 +10,6 @@
 		"precompile": "rm -rf dist/",
 		"compile": "tsc"
 	},
-	"dependencies": {},
 	"devDependencies": {
 		"rugged": "link:../..",
 		"typescript": "^4.2.2"
