@@ -1,3 +1,3 @@
-import helloWorld from 'typescript-project';
+import helloWorld from 'javascript-project';
 
 console.log(helloWorld());

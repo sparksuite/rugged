@@ -1,11 +1,8 @@
 // Imports
 import verify from './verify';
 import path from 'path';
-import { HandledError } from './errors';
-import configure from './configure';
-
-// Mock the log function
-console.log = jest.fn();
+import getConfig from './get-config';
+import { PrintableError } from './errors';
 
 // Set the absolute path to the test file trees directory
 const testFileTreesPath = path.normalize(path.join(__dirname, '..', '..', 'test-file-trees'));
@@ -17,10 +14,11 @@ describe('#verify.packageFile()', () => {
 
 		expect(() => {
 			verify.packageFile();
-		}).toThrow(HandledError);
+		}).toThrow(PrintableError);
 
-		expect(console.log).toHaveBeenCalledTimes(1);
-		expect(console.log).toHaveBeenCalledWith(expect.stringMatching(/Couldn’t find package.json in this directory/));
+		expect(() => {
+			verify.packageFile();
+		}).toThrow('Couldn’t find package.json in this directory');
 	});
 
 	it('Catches package files that are missing a name', () => {
@@ -28,10 +26,11 @@ describe('#verify.packageFile()', () => {
 
 		expect(() => {
 			verify.packageFile();
-		}).toThrow(HandledError);
+		}).toThrow(PrintableError);
 
-		expect(console.log).toHaveBeenCalledTimes(1);
-		expect(console.log).toHaveBeenCalledWith(expect.stringMatching(/The package.json is missing a name/));
+		expect(() => {
+			verify.packageFile();
+		}).toThrow('The package.json is missing a name');
 	});
 
 	it('Catches package files that are missing a version', () => {
@@ -39,10 +38,11 @@ describe('#verify.packageFile()', () => {
 
 		expect(() => {
 			verify.packageFile();
-		}).toThrow(HandledError);
+		}).toThrow(PrintableError);
 
-		expect(console.log).toHaveBeenCalledTimes(1);
-		expect(console.log).toHaveBeenCalledWith(expect.stringMatching(/The package.json is missing a version/));
+		expect(() => {
+			verify.packageFile();
+		}).toThrow('The package.json is missing a version');
 	});
 
 	it('Returns parsed version', () => {
@@ -59,23 +59,22 @@ describe('#verify.testProjects()', () => {
 	it('Catches missing package files', async () => {
 		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'missing-test-projects'));
 
-		const configuration = await configure();
+		const config = await getConfig();
 
 		expect(() => {
-			verify.testProjects(configuration);
-		}).toThrow(HandledError);
+			verify.testProjects(config);
+		}).toThrow(PrintableError);
 
-		expect(console.log).toHaveBeenCalledTimes(1);
-		expect(console.log).toHaveBeenCalledWith(
-			expect.stringMatching(/Couldn’t find \.\/test\-projects\/ in this directory/)
-		);
+		expect(() => {
+			verify.testProjects(config);
+		}).toThrow('Couldn’t find ./test-projects/ in this directory');
 	});
 
 	it('Returns absolute path', async () => {
 		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'primary'));
 
-		const configuration = await configure();
+		const config = await getConfig();
 
-		expect(verify.testProjects(configuration)).toMatch(/\/rugged\/test\-file\-trees\/primary\/test\-projects$/);
+		expect(verify.testProjects(config)).toMatch(/\/rugged\/test\-file\-trees\/primary\/test\-projects$/);
 	});
 });

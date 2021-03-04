@@ -1,3 +1,3 @@
-const helloWorld = require('typescript-project');
+const helloWorld = require('javascript-project');
 
 console.log(helloWorld());

@@ -9,6 +9,14 @@ export class HandledError extends Error {
 	}
 }
 
+/** This error indicates it was expected, and a pretty error message should be printed */
+export class PrintableError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = 'PrintableError';
+	}
+}
+
 /** Yarn error catcher for Listr */
 export const yarnErrorCatcher = (error: execa.ExecaError<string>) => {
 	throw new Error(

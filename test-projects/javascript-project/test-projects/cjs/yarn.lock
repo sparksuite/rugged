@@ -5,7 +5,3 @@
 "javascript-project@link:../..":
   version "0.0.0"
   uid ""
-
-"typescript-project@link:../..":
-  version "0.0.0"
-  uid ""
