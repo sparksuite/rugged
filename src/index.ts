@@ -6,7 +6,7 @@ import chalk from './utils/chalk';
 import glob from 'glob';
 import Listr from 'listr';
 import execa from 'execa';
-import { HandledError, yarnErrorCatcher } from './utils/errors';
+import { HandledError, PrintableError, yarnErrorCatcher } from './utils/errors';
 import getConfig, { Config } from './utils/get-config';
 import verify from './utils/verify';
 import printHeader from './utils/print-header';
@@ -109,6 +109,12 @@ const finalResult: FinalResult = {
 
 		// Catch already-handled errors
 		if (error instanceof HandledError) {
+			return;
+		}
+
+		// Catch printable errors
+		if (error instanceof PrintableError) {
+			console.error(chalk.red(`\n${error.message}\n`));
 			return;
 		}
 
