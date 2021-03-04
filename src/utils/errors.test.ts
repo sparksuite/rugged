@@ -21,7 +21,7 @@ describe('#yarnErrorCatcher()', () => {
 				stdout: '',
 				timedOut: false,
 			});
-		}).toThrowError(new Error('Example error'));
+		}).toThrow(new Error('Example error'));
 	});
 
 	it('Handles multiline errors', () => {
@@ -39,7 +39,7 @@ describe('#yarnErrorCatcher()', () => {
 				stdout: '',
 				timedOut: false,
 			});
-		}).toThrowError(new Error('Example error 1\nExample error 2'));
+		}).toThrow(new Error('Example error 1\nExample error 2'));
 	});
 
 	it('Trims “error” prefix', () => {
@@ -57,7 +57,7 @@ describe('#yarnErrorCatcher()', () => {
 				stdout: '',
 				timedOut: false,
 			});
-		}).toThrowError(new Error('Example error'));
+		}).toThrow(new Error('Example error'));
 
 		expect(() => {
 			yarnErrorCatcher({
@@ -73,6 +73,6 @@ describe('#yarnErrorCatcher()', () => {
 				stdout: '',
 				timedOut: false,
 			});
-		}).toThrowError(new Error('Example error 1\nExample error 2'));
+		}).toThrow(new Error('Example error 1\nExample error 2'));
 	});
 });
