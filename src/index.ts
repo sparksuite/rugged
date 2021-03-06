@@ -105,7 +105,7 @@ const finalResult: FinalResult = {
 	// Trigger each step
 	await installDependencies(packageFile, testProjectPaths);
 	await injectRootPackage(packageFile, testProjectPaths);
-	await testProjects(testProjectPaths, finalResult);
+	await testProjects(testProjectPaths, finalResult, config.testInParallel);
 })()
 	.catch((error) => {
 		// Remember that we encountered an error

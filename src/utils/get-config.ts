@@ -17,6 +17,9 @@ export interface Config {
 	/** An absolute path to the file Yarn commands should use for the `--mutex` flag. Defaults to a randomly
 	 * generated temporary file. */
 	yarnMutexFilePath: string;
+
+	/** Whether to run tests in parallel */
+	testInParallel: boolean;
 }
 
 // Initialize
@@ -34,6 +37,7 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 		injectAsDevDependency: false,
 		testProjectsDirectory: 'test-projects',
 		yarnMutexFilePath: tmp.fileSync().name,
+		testInParallel: true,
 	};
 
 	// Initialize custom config
@@ -48,6 +52,7 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 		injectAsDevDependency: (value) => typeof value === 'boolean',
 		testProjectsDirectory: (value) => typeof value === 'string' && fs.existsSync(value),
 		yarnMutexFilePath: (value) => typeof value === 'string' && fs.existsSync(value),
+		testInParallel: (value) => typeof value === 'boolean',
 	};
 
 	// Initialize paths to possible config files

@@ -7,7 +7,11 @@ import { HandledError } from '../utils/errors';
 import printHeader from '../utils/print-header';
 
 /** Installs dependencies into the root project and test projects */
-export default async function testProjects(testProjectPaths: string[], finalResult: FinalResult) {
+export default async function testProjects(
+	testProjectPaths: string[],
+	finalResult: FinalResult,
+	testInParallel: boolean
+) {
 	// Print section header
 	printHeader('Testing projects');
 
@@ -31,7 +35,7 @@ export default async function testProjects(testProjectPaths: string[], finalResu
 				}),
 		})),
 		{
-			concurrent: true,
+			concurrent: testInParallel,
 			exitOnError: false,
 		}
 	);
