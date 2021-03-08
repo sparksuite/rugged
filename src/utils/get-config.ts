@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import { PrintableError } from './errors';
 import chalk from './chalk';
+import { Service } from 'ts-node';
 
 // Define what a fully-constructed config object looks like
 export interface Config {
@@ -57,7 +58,7 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 
 	// Initialize paths to possible config files
 	const jsPath = path.join(process.cwd(), 'rugged.config.js');
-	// const tsPath = path.join(process.cwd(), 'rugged.config.ts');
+	const tsPath = path.join(process.cwd(), 'rugged.config.ts');
 
 	// Initialize the filename
 	let configFilename = '';
@@ -69,6 +70,41 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 
 		// Require it
 		customConfig = require(jsPath);
+	}
+
+	// Handle a TS file
+	if (fs.existsSync(tsPath)) {
+		// Remember the filename
+		configFilename = path.basename(tsPath);
+
+		// Register Typescript compiler instance
+		let service: Service;
+
+		try {
+			service = require('ts-node').register({
+				compilerOptions: {
+					module: 'CommonJS',
+				},
+			});
+		} catch (e) {
+			if (e.code === 'MODULE_NOT_FOUND') {
+				throw new Error('To use a Typescript config file, ts-node should be installed as a dev-dependency');
+			}
+
+			throw new Error('Unexpected error');
+		}
+
+		// Enable the compiler
+		service.enabled(true);
+
+		// Require it
+		const requiredConfig = require(tsPath);
+
+		// Interoperability between ES Modules and Common JS
+		customConfig = requiredConfig?.__esModule ? requiredConfig.default : requiredConfig;
+
+		// Disable the compiler
+		service.enabled(false);
 	}
 
 	// Handle the custom config
