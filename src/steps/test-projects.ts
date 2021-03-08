@@ -4,14 +4,14 @@ import Listr from 'listr';
 import path from 'path';
 import { FinalResult } from '..';
 import { HandledError } from '../utils/errors';
+import getConfig from '../utils/get-config';
 import printHeader from '../utils/print-header';
 
 /** Installs dependencies into the root project and test projects */
-export default async function testProjects(
-	testProjectPaths: string[],
-	finalResult: FinalResult,
-	testInParallel: boolean
-) {
+export default async function testProjects(testProjectPaths: string[], finalResult: FinalResult) {
+	// Get the configuration for testing in parallel
+	const { testInParallel } = await getConfig();
+
 	// Print section header
 	printHeader('Testing projects');
 
