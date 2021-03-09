@@ -91,7 +91,7 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 				throw new Error('To use a Typescript config file, ts-node should be installed as a dev-dependency');
 			}
 
-			throw new Error('Unexpected error');
+			throw e;
 		}
 
 		// Enable the compiler
