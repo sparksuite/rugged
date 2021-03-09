@@ -20,6 +20,9 @@ export interface Config {
 
 	/** Whether to run tests in parallel */
 	testInParallel: boolean;
+
+	/** Whether to print successful test output*/
+	printSuccessfulOutput: boolean;
 }
 
 // Initialize
@@ -38,6 +41,7 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 		testProjectsDirectory: 'test-projects',
 		yarnMutexFilePath: tmp.fileSync().name,
 		testInParallel: true,
+		printSuccessfulOutput: false,
 	};
 
 	// Initialize custom config
@@ -53,6 +57,7 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 		testProjectsDirectory: (value) => typeof value === 'string' && fs.existsSync(value),
 		yarnMutexFilePath: (value) => typeof value === 'string' && fs.existsSync(value),
 		testInParallel: (value) => typeof value === 'boolean',
+		printSuccessfulOutput: (value) => typeof value === 'boolean',
 	};
 
 	// Initialize paths to possible config files
