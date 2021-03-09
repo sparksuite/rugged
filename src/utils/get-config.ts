@@ -92,7 +92,7 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 		// Require it
 		const requiredConfig = require(tsPath);
 
-		// Interoperability between ES/Common JS modules
+		// Interoperability between ECMAScript / Common JS modules
 		customConfig = requiredConfig?.__esModule ? requiredConfig.default : requiredConfig;
 
 		// Disable the compiler
