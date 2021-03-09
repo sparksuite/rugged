@@ -80,19 +80,11 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 		// Register Typescript compiler instance
 		let service: Service;
 
-		try {
-			service = require('ts-node').register({
-				compilerOptions: {
-					module: 'CommonJS',
-				},
-			});
-		} catch (e) {
-			if (e.code === 'MODULE_NOT_FOUND') {
-				throw new Error('To use a Typescript config file, ts-node should be installed as a dev-dependency');
-			}
-
-			throw e;
-		}
+		service = require('ts-node').register({
+			compilerOptions: {
+				module: 'CommonJS',
+			},
+		});
 
 		// Enable the compiler
 		service.enabled(true);
@@ -100,7 +92,7 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 		// Require it
 		const requiredConfig = require(tsPath);
 
-		// Interoperability between ES Modules and Common JS
+		// Interoperability between ES/Common JS modules
 		customConfig = requiredConfig?.__esModule ? requiredConfig.default : requiredConfig;
 
 		// Disable the compiler
