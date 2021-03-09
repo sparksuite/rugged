@@ -21,7 +21,7 @@ export interface Config {
 	/** Whether to run tests in parallel */
 	testInParallel: boolean;
 
-	/** Whether to print successful test output*/
+	/** Whether to print successful test output, in addition to failed test output. Defaults to `false`. */
 	printSuccessfulOutput: boolean;
 }
 
