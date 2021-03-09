@@ -32,9 +32,6 @@ export default async function testProjects(testProjectPaths: string[], finalResu
 										project: path.basename(testProjectPath),
 										output: result.all ?? 'No output...',
 									});
-
-									// Throw error that Listr will pick up
-									throw new Error('Output will be printed below');
 							  }
 							: undefined
 					)
