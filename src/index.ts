@@ -28,11 +28,16 @@ export interface FinalResult {
 		project: string;
 		output: string;
 	}[];
+	successfulTests: {
+		project: string;
+		output: string;
+	}[];
 }
 
 const finalResult: FinalResult = {
 	errorEncountered: false,
 	failedTests: [],
+	successfulTests: [],
 };
 
 // Wrap everything in a self-executing async function
