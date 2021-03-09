@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import { PrintableError } from './errors';
 import chalk from './chalk';
-import { Service } from 'ts-node';
+import { create } from 'ts-node';
 
 // Define what a fully-constructed config object looks like
 export interface Config {
@@ -78,9 +78,7 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 		configFilename = path.basename(tsPath);
 
 		// Register Typescript compiler instance
-		let service: Service;
-
-		service = require('ts-node').register({
+		const service = create({
 			compilerOptions: {
 				module: 'CommonJS',
 			},
