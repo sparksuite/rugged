@@ -21,7 +21,7 @@ export interface Config {
 	/** Whether to run tests in parallel */
 	testInParallel: boolean;
 
-	/** Which script to run to compile project. Defaults to `compile`. */
+	/** Which `package.json` script to run to compile the root project. Defaults to `compile`; however, the compilation step will be skipped if the script does not exist. */
 	compileScriptName: string;
 }
 
