@@ -23,20 +23,22 @@ export default async function testProjects(testProjectPaths: string[], finalResu
 				execa('yarn', [`test`], {
 					cwd: testProjectPath,
 					all: true,
-				}).then(
-					printSuccessfulOutput
-						? (result) => {
-								// Add to final result
-								finalResult.successfulTests.push({
-									project: path.basename(testProjectPath),
-									output: result.all ?? 'No output...',
-								});
+				})
+					.then(
+						printSuccessfulOutput
+							? (result) => {
+									// Add to final result
+									finalResult.successfulTests.push({
+										project: path.basename(testProjectPath),
+										output: result.all ?? 'No output...',
+									});
 
-								// Throw error that Listr will pick up
-								throw new Error('Output will be printed below');
-						  }
-						: undefined,
-					(error) => {
+									// Throw error that Listr will pick up
+									throw new Error('Output will be printed below');
+							  }
+							: undefined
+					)
+					.catch((error) => {
 						// Add to final result
 						finalResult.failedTests.push({
 							project: path.basename(testProjectPath),
@@ -45,8 +47,7 @@ export default async function testProjects(testProjectPaths: string[], finalResu
 
 						// Throw error that Listr will pick up
 						throw new Error('Output will be printed below');
-					}
-				),
+					}),
 		})),
 		{
 			concurrent: testInParallel,
