@@ -92,7 +92,7 @@ const finalResult: FinalResult = {
 		// Loop over each successful test
 		for (const successfulTest of finalResult.successfulTests) {
 			// Print section header
-			console.log(`\n${chalk.inverse(chalk.white(chalk.bold(` Output from: ${successfulTest.project} `)))}\n`);
+			console.log(`\n${chalk.inverse(chalk.green(chalk.bold(` Output from: ${successfulTest.project} `)))}\n`);
 
 			// Print output
 			console.log(successfulTest.output.trim());
