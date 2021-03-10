@@ -20,6 +20,9 @@ export interface Config {
 
 	/** Whether to run tests in parallel */
 	testInParallel: boolean;
+
+	/** Which `package.json` script to run to compile the root project. Defaults to `compile`; however, the compilation step will be skipped if the script does not exist. */
+	compileScriptName: string;
 }
 
 // Initialize
@@ -38,6 +41,7 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 		testProjectsDirectory: 'test-projects',
 		yarnMutexFilePath: tmp.fileSync().name,
 		testInParallel: true,
+		compileScriptName: 'compile',
 	};
 
 	// Initialize custom config
@@ -53,6 +57,7 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 		testProjectsDirectory: (value) => typeof value === 'string' && fs.existsSync(value),
 		yarnMutexFilePath: (value) => typeof value === 'string' && fs.existsSync(value),
 		testInParallel: (value) => typeof value === 'boolean',
+		compileScriptName: (value) => typeof value === 'string',
 	};
 
 	// Initialize paths to possible config files
