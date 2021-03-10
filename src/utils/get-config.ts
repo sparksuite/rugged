@@ -19,7 +19,7 @@ export interface Config {
 	 * generated temporary file. */
 	yarnMutexFilePath: string;
 
-	/** Whether to run tests in parallel */
+	/** Whether to run tests in parallel. Defaults to `true`. */
 	testInParallel: boolean;
 
 	/** Which `package.json` script to run to compile the root project. Defaults to `compile`; however, the compilation step will be skipped if the script does not exist. */
