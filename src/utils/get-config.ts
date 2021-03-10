@@ -77,7 +77,7 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 		// Remember the filename
 		configFilename = path.basename(tsPath);
 
-		// Register Typescript compiler instance
+		// Register TypeScript compiler instance
 		const service = register({
 			compilerOptions: {
 				module: 'CommonJS',
