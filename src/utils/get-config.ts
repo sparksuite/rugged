@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import { PrintableError } from './errors';
 import chalk from './chalk';
+import { register } from 'ts-node';
 
 // Define what a fully-constructed config object looks like
 export interface Config {
@@ -62,7 +63,7 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 
 	// Initialize paths to possible config files
 	const jsPath = path.join(process.cwd(), 'rugged.config.js');
-	// const tsPath = path.join(process.cwd(), 'rugged.config.ts');
+	const tsPath = path.join(process.cwd(), 'rugged.config.ts');
 
 	// Initialize the filename
 	let configFilename = '';
@@ -74,6 +75,31 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 
 		// Require it
 		customConfig = require(jsPath);
+	}
+
+	// Handle a TS file
+	if (fs.existsSync(tsPath)) {
+		// Remember the filename
+		configFilename = path.basename(tsPath);
+
+		// Register TypeScript compiler instance
+		const service = register({
+			compilerOptions: {
+				module: 'CommonJS',
+			},
+		});
+
+		// Enable the compiler
+		service.enabled(true);
+
+		// Require it
+		const requiredConfig = require(tsPath);
+
+		// Interoperability between ECMAScript / Common JS modules
+		customConfig = requiredConfig?.__esModule ? requiredConfig.default : requiredConfig;
+
+		// Disable the compiler
+		service.enabled(false);
 	}
 
 	// Handle the custom config

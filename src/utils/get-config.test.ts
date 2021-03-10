@@ -33,6 +33,14 @@ describe('#getConfig(true)', () => {
 		});
 	});
 
+	it('Handles TS custom config files', async () => {
+		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'ts-config'));
+
+		expect(await getConfig(true)).toMatchObject({
+			injectAsDevDependency: true,
+		});
+	});
+
 	it('Handles invalid config file export', async () => {
 		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'invalid-config'));
 
