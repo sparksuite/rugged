@@ -75,6 +75,6 @@ describe('#verify.testProjects()', () => {
 
 		const config = await getConfig();
 
-		expect(verify.testProjects(config)).toMatch(/(\/|\\)rugged\1test\-file\-trees\1primary\1test\-projects$/);
+		expect(verify.testProjects(config)).toMatch(path.join('rugged', 'test-file-trees', 'primary', 'test-projects'));
 	});
 });
