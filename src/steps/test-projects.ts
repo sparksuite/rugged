@@ -24,17 +24,15 @@ export default async function testProjects(testProjectPaths: string[], finalResu
 					cwd: testProjectPath,
 					all: true,
 				})
-					.then(
-						printSuccessfulOutput
-							? (result) => {
-									// Add to final result
-									finalResult.successfulTests.push({
-										project: path.basename(testProjectPath),
-										output: result.all ?? 'No output...',
-									});
-							  }
-							: undefined
-					)
+					.then((result) => {
+						if (printSuccessfulOutput) {
+							// Add to final result
+							finalResult.successfulTests.push({
+								project: path.basename(testProjectPath),
+								output: result.all ?? 'No output...',
+							});
+						}
+					})
 					.catch((error) => {
 						// Add to final result
 						finalResult.failedTests.push({
