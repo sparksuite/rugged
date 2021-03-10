@@ -20,8 +20,8 @@ export default async function injectRootPackage(packageFile: PackageFile, testPr
 	const tasks = new Listr([
 		{
 			title: `Compiling`,
-			skip: () => !Object.keys(packageFile.scripts ?? {}).includes('compile'),
-			task: () => execa('yarn', ['compile']).catch(yarnErrorCatcher),
+			skip: () => !Object.keys(packageFile.scripts ?? {}).includes(config.compileScriptName),
+			task: () => execa('yarn', [config.compileScriptName]).catch(yarnErrorCatcher),
 		},
 		{
 			title: `Packaging`,
