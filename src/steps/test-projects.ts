@@ -25,7 +25,10 @@ export default async function testProjects(testProjectPaths: string[], finalResu
 				const execaInput = await packageManager.runScript(testProjectPath, 'test');
 
 				// Run execa command
-				const result = await execa(execaInput.tool, execaInput.args);
+				const result = await execa(execaInput.tool, execaInput.args, {
+					cwd: testProjectPath,
+					all: true,
+				});
 
 				// Check for failure
 				if (result.failed) {
