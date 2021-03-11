@@ -62,7 +62,7 @@ const finalResult: FinalResult = {
 			testProjectPaths.map((testProjectPath) => ({
 				title: path.basename(testProjectPath),
 				task: async () => {
-					await execa('yarn', [`--mutex`, `file:${config.yarnMutexFilePath}`, `remove`, packageFile.name], {
+					await execa('yarn', [`--mutex`, `network:${config.yarnMutexPort}`, `remove`, packageFile.name], {
 						cwd: testProjectPath,
 					}).catch((error) => {
 						if (error.toString().includes(`This module isn't specified in a package.json file`)) {
