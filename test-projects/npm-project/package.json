@@ -9,10 +9,10 @@
 		"test": "rugged",
 		"posttest": "replace-in-file /file:\\.+\\.tgz/g file:../.. **/*/package-lock.json --isRegex"
 	},
-	"devDependencies": {
-		"rugged": "file:../.."
-	},
 	"dependencies": {
 		"replace-in-file": "^6.2.0"
+	},
+	"devDependencies": {
+		"rugged": "file:../.."
 	}
 }
