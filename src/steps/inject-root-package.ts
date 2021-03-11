@@ -57,7 +57,8 @@ export default async function injectRootPackage(testProjectPaths: string[]) {
 
 				// Manually move the file to the temporary directory, if using npm
 				if ((await packageManager.choosePackageManager(process.cwd())) === 'npm') {
-					fs.renameSync(path.join(process.cwd(), result.stdout), ctx.packagePath);
+					fs.copyFileSync(path.join(process.cwd(), result.stdout), ctx.packagePath);
+					fs.unlinkSync(path.join(process.cwd(), result.stdout));
 				}
 			},
 		},
