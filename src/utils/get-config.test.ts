@@ -22,7 +22,7 @@ describe('#getConfig(true)', () => {
 		const config1 = await getConfig(true);
 		const config2 = await getConfig();
 
-		expect(config1.yarnMutexFilePath).toStrictEqual(config2.yarnMutexFilePath);
+		expect(config1).toBe(config2);
 	});
 
 	it('Handles JS custom config files', async () => {
