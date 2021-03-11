@@ -3,7 +3,7 @@ import fs from 'fs';
 import execa from 'execa';
 import Listr from 'listr';
 import path from 'path';
-import { HandledError, yarnErrorCatcher } from '../utils/errors';
+import { HandledError } from '../utils/errors';
 import printHeader from '../utils/print-header';
 import tmp from 'tmp';
 import getConfig from '../utils/get-config';
@@ -31,7 +31,7 @@ export default async function injectRootPackage(testProjectPaths: string[]) {
 				const execaInput = await packageManager.runScript(process.cwd(), config.compileScriptName);
 
 				// Run execa command
-				await execa(execaInput.tool, execaInput.args).catch(yarnErrorCatcher);
+				await execa(execaInput.tool, execaInput.args).catch(packageManager.errorCatcher);
 			},
 		},
 		{
@@ -49,7 +49,7 @@ export default async function injectRootPackage(testProjectPaths: string[]) {
 				const execaInput = await packageManager.packagePackage(process.cwd(), ctx.packagePath);
 
 				// Package up the package
-				const result = await execa(execaInput.tool, execaInput.args).catch(yarnErrorCatcher);
+				const result = await execa(execaInput.tool, execaInput.args).catch(packageManager.errorCatcher);
 
 				// Manually move the file to the temporary directory, if using npm
 				if ((await packageManager.choosePackageManager(process.cwd())) === 'npm') {
@@ -75,7 +75,7 @@ export default async function injectRootPackage(testProjectPaths: string[]) {
 									return;
 								}
 
-								return yarnErrorCatcher(error);
+								return packageManager.errorCatcher(error);
 							});
 
 							// Determine what to give execa
@@ -89,7 +89,7 @@ export default async function injectRootPackage(testProjectPaths: string[]) {
 									return;
 								}
 
-								return yarnErrorCatcher(error);
+								return packageManager.errorCatcher(error);
 							});
 						},
 					})),
@@ -112,7 +112,7 @@ export default async function injectRootPackage(testProjectPaths: string[]) {
 							// Run execa command
 							await execa(execaInput.tool, execaInput.args, {
 								cwd: testProjectPath,
-							}).catch(yarnErrorCatcher);
+							}).catch(packageManager.errorCatcher);
 						},
 					})),
 					{

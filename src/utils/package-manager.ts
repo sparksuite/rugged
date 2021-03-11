@@ -5,6 +5,7 @@ import fs from 'fs';
 import path from 'path';
 import { PrintableError } from './errors';
 import chalk from './chalk';
+import execa from 'execa';
 
 // Define what return values look like
 interface ExecaInput {
@@ -182,6 +183,16 @@ const packageManager = {
 				};
 			}
 		}
+	},
+
+	/** Error catcher, generally for use inside Listr tasks */
+	errorCatcher(error: execa.ExecaError<string>): void {
+		throw new Error(
+			error.stderr
+				.split('\n')
+				.map((line) => line.replace(/^error /, ''))
+				.join('\n')
+		);
 	},
 };
 

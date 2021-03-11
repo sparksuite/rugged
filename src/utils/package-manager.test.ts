@@ -1,14 +1,16 @@
 // Imports
-import { yarnErrorCatcher } from './errors';
+import packageManager from './package-manager';
 
 // Mock the function
 console.log = jest.fn();
 
 // Tests
-describe('#yarnErrorCatcher()', () => {
+describe('#packageManager.errorCatcher()', () => {
+	// TODO: More tests
+
 	it('Handles plain errors', () => {
 		expect(() => {
-			yarnErrorCatcher({
+			packageManager.errorCatcher({
 				command: '',
 				exitCode: 1,
 				failed: true,
@@ -26,7 +28,7 @@ describe('#yarnErrorCatcher()', () => {
 
 	it('Handles multiline errors', () => {
 		expect(() => {
-			yarnErrorCatcher({
+			packageManager.errorCatcher({
 				command: '',
 				exitCode: 1,
 				failed: true,
@@ -44,7 +46,7 @@ describe('#yarnErrorCatcher()', () => {
 
 	it('Trims “error” prefix', () => {
 		expect(() => {
-			yarnErrorCatcher({
+			packageManager.errorCatcher({
 				command: '',
 				exitCode: 1,
 				failed: true,
@@ -60,7 +62,7 @@ describe('#yarnErrorCatcher()', () => {
 		}).toThrow(new Error('Example error'));
 
 		expect(() => {
-			yarnErrorCatcher({
+			packageManager.errorCatcher({
 				command: '',
 				exitCode: 1,
 				failed: true,

@@ -6,7 +6,7 @@ import chalk from './utils/chalk';
 import glob from 'glob';
 import Listr from 'listr';
 import execa from 'execa';
-import { HandledError, PrintableError, yarnErrorCatcher } from './utils/errors';
+import { HandledError, PrintableError } from './utils/errors';
 import getConfig, { Config } from './utils/get-config';
 import verify from './utils/verify';
 import printHeader from './utils/print-header';
@@ -75,7 +75,7 @@ const finalResult: FinalResult = {
 							return;
 						}
 
-						return yarnErrorCatcher(error);
+						return packageManager.errorCatcher(error);
 					});
 
 					// Determine what to give execa
@@ -84,7 +84,7 @@ const finalResult: FinalResult = {
 					// Run execa command
 					await execa(execaInputAdd.tool, execaInputAdd.args, {
 						cwd: testProjectPath,
-					}).catch(yarnErrorCatcher);
+					}).catch(packageManager.errorCatcher);
 				},
 			})),
 			{

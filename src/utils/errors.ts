@@ -1,6 +1,3 @@
-// Imports
-import execa from 'execa';
-
 /** This error indicates it was expected and already handled */
 export class HandledError extends Error {
 	constructor(message?: string) {
@@ -16,13 +13,3 @@ export class PrintableError extends Error {
 		this.name = 'PrintableError';
 	}
 }
-
-/** Yarn error catcher for Listr */
-export const yarnErrorCatcher = (error: execa.ExecaError<string>) => {
-	throw new Error(
-		error.stderr
-			.split('\n')
-			.map((line) => line.replace(/^error /, ''))
-			.join('\n')
-	);
-};

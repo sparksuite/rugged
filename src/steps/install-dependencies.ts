@@ -2,7 +2,7 @@
 import execa from 'execa';
 import Listr from 'listr';
 import path from 'path';
-import { HandledError, yarnErrorCatcher } from '../utils/errors';
+import { HandledError } from '../utils/errors';
 import getContext from '../utils/get-context';
 import packageManager from '../utils/package-manager';
 import printHeader from '../utils/print-header';
@@ -25,7 +25,7 @@ export default async function installDependencies(testProjectPaths: string[]) {
 					const execaInput = await packageManager.installDependencies(process.cwd());
 
 					// Run execa command
-					await execa(execaInput.tool, execaInput.args).catch(yarnErrorCatcher);
+					await execa(execaInput.tool, execaInput.args).catch(packageManager.errorCatcher);
 				},
 			},
 			...testProjectPaths.map((testProjectPath) => ({
@@ -37,7 +37,7 @@ export default async function installDependencies(testProjectPaths: string[]) {
 					// Run execa command
 					await execa(execaInput.tool, execaInput.args, {
 						cwd: testProjectPath,
-					}).catch(yarnErrorCatcher);
+					}).catch(packageManager.errorCatcher);
 				},
 			})),
 		],
