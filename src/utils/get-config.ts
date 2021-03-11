@@ -14,8 +14,7 @@ export interface Config {
 	/** Which directory to search for test projects. Defaults to `test-projects`. */
 	testProjectsDirectory: string;
 
-	/** A port Yarn commands should use for the `--mutex` flag. Defaults to a randomly
-	 * 31997. */
+	/** The port Yarn commands should use for the `--mutex` flag. Defaults to 31997. */
 	yarnMutexPort: number;
 
 	/** Whether to run tests in parallel */
