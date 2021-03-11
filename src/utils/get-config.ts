@@ -1,5 +1,4 @@
 // Imports
-import tmp from 'tmp';
 import fs from 'fs';
 import path from 'path';
 import { PrintableError } from './errors';
@@ -15,9 +14,8 @@ export interface Config {
 	/** Which directory to search for test projects. Defaults to `test-projects`. */
 	testProjectsDirectory: string;
 
-	/** An absolute path to the file Yarn commands should use for the `--mutex` flag. Defaults to a randomly
-	 * generated temporary file. */
-	yarnMutexFilePath: string;
+	/** The port Yarn commands should use for the `--mutex` flag. Defaults to 31997. */
+	yarnMutexPort: number;
 
 	/** Whether to run tests in parallel */
 	testInParallel: boolean;
@@ -43,7 +41,7 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 	config = {
 		injectAsDevDependency: false,
 		testProjectsDirectory: 'test-projects',
-		yarnMutexFilePath: tmp.fileSync().name,
+		yarnMutexPort: 31997,
 		testInParallel: true,
 		compileScriptName: 'compile',
 		printSuccessfulOutput: false,
@@ -60,7 +58,7 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 	const validate: Validate = {
 		injectAsDevDependency: (value) => typeof value === 'boolean',
 		testProjectsDirectory: (value) => typeof value === 'string' && fs.existsSync(value),
-		yarnMutexFilePath: (value) => typeof value === 'string' && fs.existsSync(value),
+		yarnMutexPort: (value) => Number.isInteger(value) && value > 0 && value < 65536,
 		testInParallel: (value) => typeof value === 'boolean',
 		compileScriptName: (value) => typeof value === 'string',
 		printSuccessfulOutput: (value) => typeof value === 'boolean',
