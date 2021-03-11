@@ -173,7 +173,11 @@ const packageManager = {
 		} else {
 			return {
 				tool: 'npm',
-				args: [`install`, config.injectAsDevDependency ? `--save-dev` : '--save-prod', dependency.replace(/^link:/, '')],
+				args: [
+					`install`,
+					config.injectAsDevDependency ? `--save-dev` : '--save-prod',
+					dependency.replace(/^link:/, ''),
+				],
 			};
 		}
 	},
