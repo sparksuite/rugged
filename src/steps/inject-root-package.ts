@@ -51,6 +51,10 @@ export default async function injectRootPackage(testProjectPaths: string[]) {
 				// Package up the package
 				const result = await execa(execaInput.tool, execaInput.args).catch(packageManager.errorCatcher);
 
+				if (!result) {
+					throw new Error('Did not get result back from packaging command');
+				}
+
 				// Manually move the file to the temporary directory, if using npm
 				if ((await packageManager.choosePackageManager(process.cwd())) === 'npm') {
 					fs.renameSync(path.join(process.cwd(), result.stdout), ctx.packagePath);
