@@ -1,8 +1,7 @@
 import path from 'path';
-import { Config } from './src';
+import { Config } from 'rugged';
 
 const config: Config = {
-	injectAsDevDependency: true,
 	yarnMutexFilePath: path.join(process.cwd(), 'tmp', '.mutex'),
 };
 
