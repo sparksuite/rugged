@@ -13,6 +13,7 @@ import printHeader from './utils/print-header';
 import installDependencies from './steps/install-dependencies';
 import injectRootPackage from './steps/inject-root-package';
 import testProjects from './steps/test-projects';
+import getPackageFile from './utils/get-package-file';
 
 // Export a type used for TypeScript config files
 type PartialConfig = Partial<Config>;
@@ -45,8 +46,10 @@ const finalResult: FinalResult = {
 	// Get the config
 	const config = await getConfig();
 
+	// Get the package file
+	const packageFile = getPackageFile();
+
 	// Verification
-	const packageFile = verify.packageFile();
 	const absolutePath = verify.testProjects(config);
 
 	// Determine test project paths
@@ -117,8 +120,8 @@ const finalResult: FinalResult = {
 	};
 
 	// Trigger each step
-	await installDependencies(packageFile, testProjectPaths);
-	await injectRootPackage(packageFile, testProjectPaths);
+	await installDependencies(testProjectPaths);
+	await injectRootPackage(testProjectPaths);
 	await testProjects(testProjectPaths, finalResult);
 })()
 	.catch((error) => {
