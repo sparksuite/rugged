@@ -107,7 +107,9 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 		}
 	} catch (error) {
 		throw new PrintableError(
-			`An error was encountered while trying to compile ${chalk.bold(configFilename)} (see below):\n${error.message}`
+			`An error was encountered while trying to compile ${chalk.bold(configFilename)} (see below):\n\n${chalk.red(
+				error.message
+			)}`
 		);
 	}
 

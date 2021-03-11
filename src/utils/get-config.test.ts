@@ -45,7 +45,7 @@ describe('#getConfig(true)', () => {
 		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'js-config-compile-error'));
 
 		await expect(() => getConfig(true)).rejects.toThrow(
-			'An error was encountered while trying to compile rugged.config.js (see below):\n'
+			'An error was encountered while trying to compile rugged.config.js (see below):\n\n'
 		);
 	});
 
@@ -53,7 +53,7 @@ describe('#getConfig(true)', () => {
 		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'ts-config-compile-error'));
 
 		await expect(() => getConfig(true)).rejects.toThrow(
-			'An error was encountered while trying to compile rugged.config.ts (see below):\n'
+			'An error was encountered while trying to compile rugged.config.ts (see below):\n\n'
 		);
 	});
 
