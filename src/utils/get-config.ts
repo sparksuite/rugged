@@ -24,6 +24,9 @@ export interface Config {
 
 	/** Which `package.json` script to run to compile the root project. Defaults to `compile`; however, the compilation step will be skipped if the script does not exist. */
 	compileScriptName: string;
+
+	/** Whether to print successful test output, in addition to failed test output. Defaults to `false`. */
+	printSuccessfulOutput: boolean;
 }
 
 // Initialize
@@ -43,6 +46,7 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 		yarnMutexFilePath: tmp.fileSync().name,
 		testInParallel: true,
 		compileScriptName: 'compile',
+		printSuccessfulOutput: false,
 	};
 
 	// Initialize custom config
@@ -59,6 +63,7 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 		yarnMutexFilePath: (value) => typeof value === 'string' && fs.existsSync(value),
 		testInParallel: (value) => typeof value === 'boolean',
 		compileScriptName: (value) => typeof value === 'string',
+		printSuccessfulOutput: (value) => typeof value === 'boolean',
 	};
 
 	// Initialize paths to possible config files

@@ -29,11 +29,16 @@ export interface FinalResult {
 		project: string;
 		output: string;
 	}[];
+	successfulTests: {
+		project: string;
+		output: string;
+	}[];
 }
 
 const finalResult: FinalResult = {
 	errorEncountered: false,
 	failedTests: [],
+	successfulTests: [],
 };
 
 // Wrap everything in a self-executing async function
@@ -86,6 +91,15 @@ const finalResult: FinalResult = {
 		);
 
 		await tasks.run();
+
+		// Loop over each successful test
+		for (const successfulTest of finalResult.successfulTests) {
+			// Print section header
+			console.log(`\n${chalk.inverse(chalk.green(chalk.bold(` Output from: ${successfulTest.project} `)))}\n`);
+
+			// Print output
+			console.log(successfulTest.output.trim());
+		}
 
 		// Loop over each failed test
 		for (const failedTest of finalResult.failedTests) {
