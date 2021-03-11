@@ -1,0 +1,14 @@
+{
+	"name": "javascript-project",
+	"version": "0.0.0",
+	"main": "src/index.js",
+	"files": [
+		"src/"
+	],
+	"scripts": {
+		"test": "rugged"
+	},
+	"devDependencies": {
+		"rugged": "file:../.."
+	}
+}
