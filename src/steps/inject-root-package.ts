@@ -64,7 +64,7 @@ export default async function injectRootPackage(testProjectPaths: string[]) {
 						title: path.basename(testProjectPath),
 						task: async () => {
 							// Determine what to give execa
-							const execaInputRemove = await packageManager.remove(process.cwd(), packageFile.name);
+							const execaInputRemove = await packageManager.remove(testProjectPath, packageFile.name);
 
 							// Run execa command
 							await execa(execaInputRemove.tool, execaInputRemove.args, {
@@ -78,7 +78,7 @@ export default async function injectRootPackage(testProjectPaths: string[]) {
 							});
 
 							// Determine what to give execa
-							const execaInputUnlink = await packageManager.unlink(process.cwd(), packageFile.name);
+							const execaInputUnlink = await packageManager.unlink(testProjectPath, packageFile.name);
 
 							// Run execa command
 							await execa(execaInputUnlink.tool, execaInputUnlink.args, {
@@ -106,7 +106,7 @@ export default async function injectRootPackage(testProjectPaths: string[]) {
 						title: path.basename(testProjectPath),
 						task: async () => {
 							// Determine what to give execa
-							const execaInput = await packageManager.packagePackage(process.cwd(), `file:${ctx.packagePath}`);
+							const execaInput = await packageManager.packagePackage(testProjectPath, `file:${ctx.packagePath}`);
 
 							// Run execa command
 							await execa(execaInput.tool, execaInput.args, {

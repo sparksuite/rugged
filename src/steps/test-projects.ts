@@ -22,7 +22,7 @@ export default async function testProjects(testProjectPaths: string[], finalResu
 			title: path.basename(testProjectPath),
 			task: async () => {
 				// Determine what to give execa
-				const execaInput = await packageManager.runScript(process.cwd(), 'test');
+				const execaInput = await packageManager.runScript(testProjectPath, 'test');
 
 				// Run execa command
 				const result = await execa(execaInput.tool, execaInput.args);
