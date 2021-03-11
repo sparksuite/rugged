@@ -171,17 +171,10 @@ const packageManager = {
 				].filter((arg) => !!arg),
 			};
 		} else {
-			if (dependency.startsWith('link:')) {
-				return {
-					tool: 'npm',
-					args: [`link`, config.injectAsDevDependency ? `--save-dev` : '--save-prod', dependency.replace(/^link:/, '')],
-				};
-			} else {
-				return {
-					tool: 'npm',
-					args: [`install`, config.injectAsDevDependency ? `--save-dev` : '--save-prod', dependency],
-				};
-			}
+			return {
+				tool: 'npm',
+				args: [`install`, config.injectAsDevDependency ? `--save-dev` : '--save-prod', dependency.replace(/^link:/, '')],
+			};
 		}
 	},
 
