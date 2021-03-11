@@ -6,12 +6,12 @@ import { HandledError, yarnErrorCatcher } from '../utils/errors';
 import printHeader from '../utils/print-header';
 import tmp from 'tmp';
 import getConfig from '../utils/get-config';
-import getPackageFile from '../utils/get-package-file';
+import getContext from '../utils/get-context';
 
 /** Installs dependencies into the root project and test projects */
 export default async function injectRootPackage(testProjectPaths: string[]) {
 	// Get the package file
-	const packageFile = getPackageFile();
+	const { packageFile } = await getContext();
 
 	// Print section header
 	printHeader(`Injecting ${packageFile.name}`);

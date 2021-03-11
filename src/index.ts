@@ -13,7 +13,7 @@ import printHeader from './utils/print-header';
 import installDependencies from './steps/install-dependencies';
 import injectRootPackage from './steps/inject-root-package';
 import testProjects from './steps/test-projects';
-import getPackageFile from './utils/get-package-file';
+import getContext from './utils/get-context';
 
 // Export a type used for TypeScript config files
 type PartialConfig = Partial<Config>;
@@ -43,11 +43,9 @@ const finalResult: FinalResult = {
 
 // Wrap everything in a self-executing async function
 (async () => {
-	// Get the config
+	// Get the config/context
 	const config = await getConfig();
-
-	// Get the package file
-	const packageFile = getPackageFile();
+	const context = await getContext();
 
 	// Verification
 	const absolutePath = verify.testProjects(config);
@@ -65,7 +63,7 @@ const finalResult: FinalResult = {
 			testProjectPaths.map((testProjectPath) => ({
 				title: path.basename(testProjectPath),
 				task: async () => {
-					await execa('yarn', [`--mutex`, `file:${config.yarnMutexFilePath}`, `remove`, packageFile.name], {
+					await execa('yarn', [`--mutex`, `file:${config.yarnMutexFilePath}`, `remove`, context.packageFile.name], {
 						cwd: testProjectPath,
 					}).catch((error) => {
 						if (error.toString().includes(`This module isn't specified in a package.json file`)) {
