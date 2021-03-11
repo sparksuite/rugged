@@ -58,7 +58,7 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 	const validate: Validate = {
 		injectAsDevDependency: (value) => typeof value === 'boolean',
 		testProjectsDirectory: (value) => typeof value === 'string' && fs.existsSync(value),
-		yarnMutexPort: (value) => typeof value === 'number',
+		yarnMutexPort: (value) => Number.isInteger(value) && value > 0 && value < 65536,
 		testInParallel: (value) => typeof value === 'boolean',
 		compileScriptName: (value) => typeof value === 'string',
 		printSuccessfulOutput: (value) => typeof value === 'boolean',
