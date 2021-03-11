@@ -4,7 +4,7 @@ import Listr from 'listr';
 import path from 'path';
 import { HandledError, yarnErrorCatcher } from '../utils/errors';
 import getConfig from '../utils/get-config';
-import getPackageFile from '../utils/get-package-file';
+import getContext from '../utils/get-context';
 import printHeader from '../utils/print-header';
 
 /** Installs dependencies into the root project and test projects */
@@ -13,7 +13,7 @@ export default async function installDependencies(testProjectPaths: string[]) {
 	printHeader('Installing dependencies');
 
 	// Get the package file
-	const packageFile = getPackageFile();
+	const { packageFile } = await getContext();
 
 	// Get config
 	const config = await getConfig();
