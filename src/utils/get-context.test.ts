@@ -23,27 +23,28 @@ describe('#getContext(true)', () => {
 	it('Catches missing package files', async () => {
 		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'missing-package'));
 
-		await expect(() => getContext(true)).rejects.toThrow(
-			new PrintableError('Couldn’t find package.json in this directory')
-		);
+		await expect(() => getContext(true)).rejects.toThrow(PrintableError);
+		await expect(() => getContext(true)).rejects.toThrow('Couldn’t find package.json in this directory');
 	});
 
 	it('Catches package files that are missing a name', async () => {
 		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'package-missing-name'));
 
-		await expect(() => getContext(true)).rejects.toThrow(new PrintableError('The package.json is missing a name'));
+		await expect(() => getContext(true)).rejects.toThrow(PrintableError);
+		await expect(() => getContext(true)).rejects.toThrow('The package.json is missing a name');
 	});
 
 	it('Catches package files that are missing a version', async () => {
 		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'package-missing-version'));
 
-		await expect(() => getContext(true)).rejects.toThrow(new PrintableError('The package.json is missing a version'));
+		await expect(() => getContext(true)).rejects.toThrow(PrintableError);
+		await expect(() => getContext(true)).rejects.toThrow('The package.json is missing a version');
 	});
 
-	it('Returns parsed version', async () => {
+	it('Returns parsed package file', async () => {
 		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'primary'));
 
-		expect(await getContext(true)).toStrictEqual({
+		expect((await getContext(true)).packageFile).toStrictEqual({
 			name: 'primary',
 			version: '1.2.3',
 		});
