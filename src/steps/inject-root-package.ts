@@ -1,4 +1,5 @@
 // Imports
+import fs from 'fs';
 import execa from 'execa';
 import Listr from 'listr';
 import path from 'path';
@@ -48,11 +49,11 @@ export default async function injectRootPackage(testProjectPaths: string[]) {
 				const execaInput = await packageManager.packagePackage(process.cwd(), ctx.packagePath);
 
 				// Package up the package
-				await execa(execaInput.tool, execaInput.args).catch(yarnErrorCatcher);
+				const result = await execa(execaInput.tool, execaInput.args).catch(yarnErrorCatcher);
 
-				// Extra handling for npm
+				// Manually move the file to the temporary directory, if using npm
 				if ((await packageManager.choosePackageManager(process.cwd())) === 'npm') {
-					throw new Error('TODO');
+					fs.renameSync(path.join(process.cwd(), result.stdout), ctx.packagePath);
 				}
 			},
 		},

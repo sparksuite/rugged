@@ -14,6 +14,7 @@ import installDependencies from './steps/install-dependencies';
 import injectRootPackage from './steps/inject-root-package';
 import testProjects from './steps/test-projects';
 import getContext from './utils/get-context';
+import packageManager from './utils/package-manager';
 
 // Export a type used for TypeScript config files
 type PartialConfig = Partial<Config>;
@@ -63,7 +64,11 @@ const finalResult: FinalResult = {
 			testProjectPaths.map((testProjectPath) => ({
 				title: path.basename(testProjectPath),
 				task: async () => {
-					await execa('yarn', [`--mutex`, `network:${config.yarnMutexPort}`, `remove`, context.packageFile.name], {
+					// Determine what to give execa
+					const execaInputRemove = await packageManager.remove(testProjectPath, context.packageFile.name);
+
+					// Run execa command
+					await execa(execaInputRemove.tool, execaInputRemove.args, {
 						cwd: testProjectPath,
 					}).catch((error) => {
 						if (error.toString().includes(`This module isn't specified in a package.json file`)) {
@@ -73,13 +78,13 @@ const finalResult: FinalResult = {
 						return yarnErrorCatcher(error);
 					});
 
-					await execa(
-						'yarn',
-						[`add`, config.injectAsDevDependency ? `--dev` : '', `link:../..`].filter((arg) => !!arg),
-						{
-							cwd: testProjectPath,
-						}
-					).catch(yarnErrorCatcher);
+					// Determine what to give execa
+					const execaInputAdd = await packageManager.remove(testProjectPath, `link:../..`);
+
+					// Run execa command
+					await execa(execaInputAdd.tool, execaInputAdd.args, {
+						cwd: testProjectPath,
+					}).catch(yarnErrorCatcher);
 				},
 			})),
 			{
@@ -90,7 +95,7 @@ const finalResult: FinalResult = {
 
 		try {
 			await tasks.run();
-		} catch(error) {
+		} catch (error) {
 			// Ignore errors; last line is automatically printed by Listr under task
 		}
 
