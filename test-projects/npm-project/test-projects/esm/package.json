@@ -4,6 +4,6 @@
 		"test": "node index.js"
 	},
 	"dependencies": {
-		"javascript-project": "file:../.."
+		"npm-project": "file:../.."
 	}
 }
