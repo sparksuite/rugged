@@ -106,7 +106,7 @@ export default async function injectRootPackage(testProjectPaths: string[]) {
 						title: path.basename(testProjectPath),
 						task: async () => {
 							// Determine what to give execa
-							const execaInput = await packageManager.packagePackage(testProjectPath, `file:${ctx.packagePath}`);
+							const execaInput = await packageManager.add(testProjectPath, `file:${ctx.packagePath}`);
 
 							// Run execa command
 							await execa(execaInput.tool, execaInput.args, {
