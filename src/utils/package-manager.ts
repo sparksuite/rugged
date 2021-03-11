@@ -72,7 +72,7 @@ const packageManager = {
 		if ((await packageManager.choosePackageManager(absolutePath)) === 'yarn') {
 			return {
 				tool: 'yarn',
-				args: [`--mutex`, `file:${config.yarnMutexFilePath}`, `install`, `--prefer-offline`],
+				args: [`--mutex`, `network:${config.yarnMutexPort}`, `install`, `--prefer-offline`],
 			};
 		} else {
 			return {
@@ -123,7 +123,7 @@ const packageManager = {
 		if ((await packageManager.choosePackageManager(absolutePath)) === 'yarn') {
 			return {
 				tool: 'yarn',
-				args: [`--mutex`, `file:${config.yarnMutexFilePath}`, `remove`, dependency],
+				args: [`--mutex`, `network:${config.yarnMutexPort}`, `remove`, dependency],
 			};
 		} else {
 			return {
@@ -142,7 +142,7 @@ const packageManager = {
 		if ((await packageManager.choosePackageManager(absolutePath)) === 'yarn') {
 			return {
 				tool: 'yarn',
-				args: [`--mutex`, `file:${config.yarnMutexFilePath}`, `unlink`, dependency],
+				args: [`--mutex`, `network:${config.yarnMutexPort}`, `unlink`, dependency],
 			};
 		} else {
 			return {
@@ -163,7 +163,7 @@ const packageManager = {
 				tool: 'yarn',
 				args: [
 					`--mutex`,
-					`file:${config.yarnMutexFilePath}`,
+					`network:${config.yarnMutexPort}`,
 					`add`,
 					config.injectAsDevDependency ? `--dev` : '',
 					dependency,
