@@ -79,7 +79,7 @@ const finalResult: FinalResult = {
 					});
 
 					// Determine what to give execa
-					const execaInputAdd = await packageManager.remove(testProjectPath, `link:../..`);
+					const execaInputAdd = await packageManager.add(testProjectPath, `link:../..`);
 
 					// Run execa command
 					await execa(execaInputAdd.tool, execaInputAdd.args, {

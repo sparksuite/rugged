@@ -1,3 +1,3 @@
-const helloWorld = require('javascript-project');
+const helloWorld = require('npm-project');
 
 console.log(helloWorld());
