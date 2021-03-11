@@ -1,5 +1,5 @@
 {
-	"name": "javascript-project",
+	"name": "npm-project",
 	"version": "0.0.0",
 	"main": "src/index.js",
 	"files": [
@@ -7,8 +7,5 @@
 	],
 	"scripts": {
 		"test": "rugged"
-	},
-	"devDependencies": {
-		"rugged": "file:../.."
 	}
 }
