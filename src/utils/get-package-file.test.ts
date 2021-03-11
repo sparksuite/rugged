@@ -7,16 +7,16 @@ import getPackageFile from './get-package-file';
 const testFileTreesPath = path.normalize(path.join(__dirname, '..', '..', 'test-file-trees'));
 
 // Tests
-describe('#getPackageFile()', () => {
+describe('#getPackageFile(true)', () => {
 	it('Catches missing package files', () => {
 		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'missing-package'));
 
 		expect(() => {
-			getPackageFile();
+			getPackageFile(true);
 		}).toThrow(PrintableError);
 
 		expect(() => {
-			getPackageFile();
+			getPackageFile(true);
 		}).toThrow('Couldn’t find package.json in this directory');
 	});
 
@@ -24,11 +24,11 @@ describe('#getPackageFile()', () => {
 		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'package-missing-name'));
 
 		expect(() => {
-			getPackageFile();
+			getPackageFile(true);
 		}).toThrow(PrintableError);
 
 		expect(() => {
-			getPackageFile();
+			getPackageFile(true);
 		}).toThrow('The package.json is missing a name');
 	});
 
@@ -36,18 +36,18 @@ describe('#getPackageFile()', () => {
 		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'package-missing-version'));
 
 		expect(() => {
-			getPackageFile();
+			getPackageFile(true);
 		}).toThrow(PrintableError);
 
 		expect(() => {
-			getPackageFile();
+			getPackageFile(true);
 		}).toThrow('The package.json is missing a version');
 	});
 
 	it('Returns parsed version', () => {
 		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'primary'));
 
-		expect(getPackageFile()).toStrictEqual({
+		expect(getPackageFile(true)).toStrictEqual({
 			name: 'primary',
 			version: '1.2.3',
 		});

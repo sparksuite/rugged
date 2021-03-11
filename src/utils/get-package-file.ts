@@ -17,8 +17,8 @@ export interface PackageFile {
 let parsedFile: PackageFile | undefined = undefined;
 
 /** Retrieve and validate package file */
-export default function getPackageFile(): PackageFile {
-	if (typeof parsedFile === 'object') {
+export default function getPackageFile(refresh?: true): PackageFile {
+	if (typeof parsedFile === 'object' && refresh !== true) {
 		return parsedFile;
 	}
 
