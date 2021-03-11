@@ -88,7 +88,11 @@ const finalResult: FinalResult = {
 			}
 		);
 
-		await tasks.run();
+		try {
+			await tasks.run();
+		} catch(error) {
+			// Ignore errors; last line is automatically printed by Listr under task
+		}
 
 		// Loop over each successful test
 		for (const successfulTest of finalResult.successfulTests) {
