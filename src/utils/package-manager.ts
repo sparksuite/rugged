@@ -56,7 +56,7 @@ const packageManager = {
 		// Check what's globally installed
 		if (context.yarnAvailableGlobally) {
 			return 'yarn';
-		} else if (context.yarnAvailableGlobally) {
+		} else if (context.npmAvailableGlobally) {
 			return 'npm';
 		}
 
@@ -148,7 +148,7 @@ const packageManager = {
 		} else {
 			return {
 				tool: 'npm',
-				args: [`uninstall`, dependency],
+				args: [`unlink`, dependency],
 			};
 		}
 	},
