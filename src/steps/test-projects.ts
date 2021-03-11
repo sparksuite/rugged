@@ -28,6 +28,7 @@ export default async function testProjects(testProjectPaths: string[], finalResu
 				const result = await execa(execaInput.tool, execaInput.args, {
 					cwd: testProjectPath,
 					all: true,
+					reject: false,
 				});
 
 				// Check for failure
