@@ -5,6 +5,7 @@ import path from 'path';
 import { FinalResult } from '..';
 import { HandledError } from '../utils/errors';
 import getConfig from '../utils/get-config';
+import packageManager from '../utils/package-manager';
 import printHeader from '../utils/print-header';
 
 /** Installs dependencies into the root project and test projects */
@@ -19,30 +20,34 @@ export default async function testProjects(testProjectPaths: string[], finalResu
 	const tasks = new Listr(
 		testProjectPaths.map((testProjectPath) => ({
 			title: path.basename(testProjectPath),
-			task: () =>
-				execa('yarn', [`test`], {
-					cwd: testProjectPath,
-					all: true,
-				})
-					.then((result) => {
-						if (printSuccessfulOutput) {
-							// Add to final result
-							finalResult.successfulTests.push({
-								project: path.basename(testProjectPath),
-								output: result.all ?? 'No output...',
-							});
-						}
-					})
-					.catch((error) => {
-						// Add to final result
-						finalResult.failedTests.push({
-							project: path.basename(testProjectPath),
-							output: error.all ?? 'No output...',
-						});
+			task: async () => {
+				// Determine what to give execa
+				const execaInput = await packageManager.runScript(process.cwd(), 'test');
 
-						// Throw error that Listr will pick up
-						throw new Error('Output will be printed below');
-					}),
+				// Run execa command
+				const result = await execa(execaInput.tool, execaInput.args);
+
+				// Check for failure
+				if (result.failed) {
+					// Add to final result
+					finalResult.failedTests.push({
+						project: path.basename(testProjectPath),
+						output: result.all ?? 'No output...',
+					});
+
+					// Throw error that Listr will pick up
+					throw new Error('Output will be printed below');
+				}
+
+				// Handle success
+				if (printSuccessfulOutput) {
+					// Add to final result
+					finalResult.successfulTests.push({
+						project: path.basename(testProjectPath),
+						output: result.all ?? 'No output...',
+					});
+				}
+			},
 		})),
 		{
 			concurrent: testInParallel,
