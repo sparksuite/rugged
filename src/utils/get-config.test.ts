@@ -41,6 +41,44 @@ describe('#getConfig(true)', () => {
 		});
 	});
 
+	it('Handles compile errors in JS config files', async () => {
+		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'js-config-compile-error'));
+
+		let error: Error | undefined = undefined;
+
+		try {
+			await getConfig(true);
+		} catch (e) {
+			error = e;
+		}
+
+		expect(error).toBeInstanceOf(PrintableError);
+		expect(error).toMatchObject({
+			message: expect.stringContaining(
+				'An error was encountered while trying to compile rugged.config.js (see below):\n\n'
+			),
+		});
+	});
+
+	it('Handles compile errors in TS config files', async () => {
+		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'ts-config-compile-error'));
+
+		let error: Error | undefined = undefined;
+
+		try {
+			await getConfig(true);
+		} catch (e) {
+			error = e;
+		}
+
+		expect(error).toBeInstanceOf(PrintableError);
+		expect(error).toMatchObject({
+			message: expect.stringContaining(
+				'An error was encountered while trying to compile rugged.config.ts (see below):\n\n'
+			),
+		});
+	});
+
 	it('Handles invalid config file export', async () => {
 		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'invalid-config'));
 

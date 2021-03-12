@@ -71,38 +71,46 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 	// Initialize the filename
 	let configFilename = '';
 
-	// Handle a JS file
-	if (fs.existsSync(jsPath)) {
-		// Remember the filename
-		configFilename = path.basename(jsPath);
+	try {
+		// Handle a JS file
+		if (fs.existsSync(jsPath)) {
+			// Remember the filename
+			configFilename = path.basename(jsPath);
 
-		// Require it
-		customConfig = require(jsPath);
-	}
+			// Require it
+			customConfig = require(jsPath);
+		}
 
-	// Handle a TS file
-	if (fs.existsSync(tsPath)) {
-		// Remember the filename
-		configFilename = path.basename(tsPath);
+		// Handle a TS file
+		if (fs.existsSync(tsPath)) {
+			// Remember the filename
+			configFilename = path.basename(tsPath);
 
-		// Register TypeScript compiler instance
-		const service = register({
-			compilerOptions: {
-				module: 'CommonJS',
-			},
-		});
+			// Register TypeScript compiler instance
+			const service = register({
+				compilerOptions: {
+					module: 'CommonJS',
+				},
+			});
 
-		// Enable the compiler
-		service.enabled(true);
+			// Enable the compiler
+			service.enabled(true);
 
-		// Require it
-		const requiredConfig = require(tsPath);
+			// Require it
+			const requiredConfig = require(tsPath);
 
-		// Interoperability between ECMAScript / Common JS modules
-		customConfig = requiredConfig?.__esModule ? requiredConfig.default : requiredConfig;
+			// Interoperability between ECMAScript / Common JS modules
+			customConfig = requiredConfig?.__esModule ? requiredConfig.default : requiredConfig;
 
-		// Disable the compiler
-		service.enabled(false);
+			// Disable the compiler
+			service.enabled(false);
+		}
+	} catch (error) {
+		throw new PrintableError(
+			`An error was encountered while trying to compile ${chalk.bold(configFilename)} (see below):\n\n${chalk.red(
+				error.message
+			)}`
+		);
 	}
 
 	// Handle the custom config
