@@ -37,5 +37,17 @@
 }
 
 .getStarted {
-	border: 1px solid #fff;
+	border: none;
+	background: #fff;
+	color: #000;
+}
+
+.screenRecordingCol {
+	text-align: center;
+	padding-top: 2rem;
+}
+
+.screenRecordingImg {
+	border-radius: 0.5rem;
+	box-shadow: 0 0.2em 0.3em rgba(0, 0, 0, .2);
 }
