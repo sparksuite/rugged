@@ -59,8 +59,7 @@ Add `rugged` to the `test` script in the `package.json` file:
 ```json
 {
     "scripts": {
-        "test": "rugged", // If a `test` script doesn’t yet exist
-        "test": "... && rugged" // If there’s already a `test` script
+        "test": "rugged"
     }
 }
 ```
