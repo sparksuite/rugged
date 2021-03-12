@@ -13,6 +13,9 @@
     <a href="https://www.npmjs.com/package/rugged">
         <img alt="npm release" src="https://img.shields.io/npm/v/rugged">
     </a>
+    <a href="https://github.com/sparksuite/rugged">
+        <img alt="tested with Rugged" src="https://img.shields.io/badge/tested%20with-Rugged-green">
+    </a>
     <a href="https://github.com/sparksuite/rugged/blob/master/LICENSE">
         <img alt="license" src="https://img.shields.io/npm/l/rugged">
     </a>
@@ -71,6 +74,20 @@ Done!
 ## Documentation
 
 Read the docs at: https://ruggedjs.io/docs/
+
+## Badge
+
+Let the world know your package is being tested with Rugged!
+
+```markdown
+[![tested with Rugged](https://img.shields.io/badge/tested%20with-Rugged-green)](https://github.com/sparksuite/rugged)
+```
+
+```html
+<a href="https://github.com/sparksuite/rugged">
+    <img alt="tested with rugged" src="https://img.shields.io/badge/tested%20with-Rugged-green">
+</a>
+```
 
 ## Contributing
 
