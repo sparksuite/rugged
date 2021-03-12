@@ -46,7 +46,7 @@ export default async function injectRootPackage(testProjectPaths: string[]) {
 				ctx.packagePath = path.join(tmpDir.name, `package-${Math.random().toString(36).substring(7)}.tgz`);
 
 				// Determine what to give execa
-				const execaInput = await packageManager.packagePackage(process.cwd(), ctx.packagePath);
+				const execaInput = await packageManager.pack(process.cwd(), ctx.packagePath);
 
 				// Package up the package
 				const result = await execa(execaInput.tool, execaInput.args).catch(packageManager.errorCatcher);

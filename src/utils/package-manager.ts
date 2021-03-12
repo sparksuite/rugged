@@ -100,7 +100,7 @@ const packageManager = {
 	},
 
 	/** Package up a package at a particular path */
-	async packagePackage(absolutePath: string, filename: string): Promise<ExecaInput> {
+	async pack(absolutePath: string, filename: string): Promise<ExecaInput> {
 		// Handle based on the package manager
 		if ((await packageManager.choosePackageManager(absolutePath)) === 'yarn') {
 			return {
@@ -168,7 +168,7 @@ const packageManager = {
 					`add`,
 					config.injectAsDevDependency ? `--dev` : '',
 					dependency,
-				].filter((arg) => !!arg),
+				].filter((arg) => Boolean(arg)),
 			};
 		} else {
 			return {
