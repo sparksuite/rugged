@@ -51,18 +51,14 @@ describe('#packageManager.runScript()', () => {
 
 describe('#packageManager.pack()', () => {
 	it('Returns correct data for Yarn', async () => {
-		expect(
-			await packageManager.pack(path.join(testFileTreesPath, 'has-yarn-lock'), './example.tgz')
-		).toStrictEqual({
+		expect(await packageManager.pack(path.join(testFileTreesPath, 'has-yarn-lock'), './example.tgz')).toStrictEqual({
 			tool: 'yarn',
 			args: ['pack', '--filename', './example.tgz'],
 		});
 	});
 
 	it('Returns correct data for npm', async () => {
-		expect(
-			await packageManager.pack(path.join(testFileTreesPath, 'has-package-lock'), './example.tgz')
-		).toStrictEqual({
+		expect(await packageManager.pack(path.join(testFileTreesPath, 'has-package-lock'), './example.tgz')).toStrictEqual({
 			tool: 'npm',
 			args: ['pack'],
 		});
