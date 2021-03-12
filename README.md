@@ -23,6 +23,7 @@ Rugged orchestrates testing JavaScript packages across the variety of environmen
 - ⚡️ Performance design
 - 🔧 Easily configurable
 - 📦 Written entirely in TypeScript
+- 🌎 Works in CLI and CI environments
 - 🔬 Thoroughly tested
 - ✨ Tiny size
 - 📖 Well documented
