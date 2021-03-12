@@ -18,7 +18,7 @@
     </a>
 </p>
 
-Rugged orchestrates testing JavaScript packages across the variety of real-world environments and contexts where it’s being used, with the files that will actually be published.
+Rugged orchestrates testing JavaScript packages across the variety of real-world environments and contexts where it’s actually being used, with the files that will actually be published.
 
 - ⚡️ Performant design
 - 🔧 Configurable
