@@ -45,8 +45,6 @@ yarn add --dev rugged
 npm install --save-dev rugged
 ```
 
-Create a `test-projects/` directory with at least one test project inside of it (check out [Rugged’s own test projects](https://github.com/sparksuite/rugged/tree/master/test-projects) for examples, or [the docs](https://ruggedjs.io/docs/getting-started/create-test-projects) for more details and suggested projects).
-
 Add `rugged` to the `test` script in the `package.json` file:
 
 ```json
@@ -57,7 +55,7 @@ Add `rugged` to the `test` script in the `package.json` file:
 }
 ```
 
-Done!
+Create a `test-projects/` directory with at least one test project inside of it (check out [Rugged’s own test projects](https://github.com/sparksuite/rugged/tree/master/test-projects) for examples, or [the docs](https://ruggedjs.io/docs/getting-started/create-test-projects) for more details and suggested projects).
 
 ## Documentation
 
