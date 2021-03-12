@@ -1,24 +1,12 @@
 # <div align="center">Rugged</div>
 
 <p align="center">
-    <a href="https://www.npmjs.com/package/rugged">
-        <img alt="npm bundle size" src="https://img.shields.io/bundlephobia/min/rugged">
-    </a>
-    <a href="https://app.codecov.io/gh/sparksuite/rugged/branch/master">
-        <img alt="Codecov coverage" src="https://img.shields.io/codecov/c/github/sparksuite/rugged">
-    </a>
-    <a href="https://www.npmjs.com/package/rugged">
-        <img alt="npm downloads" src="https://img.shields.io/npm/dw/rugged">
-    </a>
-    <a href="https://www.npmjs.com/package/rugged">
-        <img alt="npm release" src="https://img.shields.io/npm/v/rugged">
-    </a>
-    <a href="https://github.com/sparksuite/rugged">
-        <img alt="tested with Rugged" src="https://img.shields.io/badge/tested%20with-Rugged-green">
-    </a>
-    <a href="https://github.com/sparksuite/rugged/blob/master/LICENSE">
-        <img alt="license" src="https://img.shields.io/npm/l/rugged">
-    </a>
+<a href="https://www.npmjs.com/package/rugged"><img alt="npm bundle size" src="https://img.shields.io/bundlephobia/min/rugged"></a>
+<a href="https://app.codecov.io/gh/sparksuite/rugged/branch/master"><img alt="Codecov coverage" src="https://img.shields.io/codecov/c/github/sparksuite/rugged"></a>
+<a href="https://www.npmjs.com/package/rugged"><img alt="npm downloads" src="https://img.shields.io/npm/dw/rugged"></a>
+<a href="https://www.npmjs.com/package/rugged"><img alt="npm release" src="https://img.shields.io/npm/v/rugged"></a>
+<a href="https://github.com/sparksuite/rugged"><img alt="tested with Rugged" src="https://img.shields.io/badge/tested%20with-Rugged-green"></a>
+<a href="https://github.com/sparksuite/rugged/blob/master/LICENSE"><img alt="license" src="https://img.shields.io/npm/l/rugged"></a>
 </p>
 
 Rugged orchestrates testing JavaScript packages across the variety of real-world environments and contexts where they’ll actually be used, with the files that will actually be published.
