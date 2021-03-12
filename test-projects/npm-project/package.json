@@ -1,0 +1,18 @@
+{
+	"name": "npm-project",
+	"version": "0.0.0",
+	"main": "src/index.js",
+	"files": [
+		"src/"
+	],
+	"scripts": {
+		"test": "rugged",
+		"posttest": "replace-in-file /file:\\.+\\.tgz/g file:../.. **/*/package-lock.json --isRegex"
+	},
+	"dependencies": {
+		"replace-in-file": "^6.2.0"
+	},
+	"devDependencies": {
+		"rugged": "file:../.."
+	}
+}
