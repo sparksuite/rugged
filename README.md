@@ -27,7 +27,7 @@ Rugged orchestrates testing JavaScript packages across the variety of environmen
 - ✨ Tiny size
 - 📖 Well documented
 
-![Screen recording](https://user-images.githubusercontent.com/3850064/110968246-ea68ed00-831c-11eb-8d1f-68136f71cccf.gif)
+![Screen recording](https://user-images.githubusercontent.com/3850064/110968462-2bf99800-831d-11eb-98f8-b3ded33a08a8.gif)
 
 ## The problem
 
