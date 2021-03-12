@@ -27,6 +27,8 @@ Rugged orchestrates testing JavaScript packages across the variety of environmen
 - ✨ Tiny size
 - 📖 Well documented
 
+![Screen recording](https://user-images.githubusercontent.com/3850064/110968246-ea68ed00-831c-11eb-8d1f-68136f71cccf.gif)
+
 ## The problem
 
 Today, people can consume your package in many contexts—in Node.js, in a browser, in an ECMAScript module, in a Common JS module, within a library (e.g., React, Angular, etc.), with assistance from compilers/transpilers/bundlers (e.g., TypeScript, Babel, Webpack, etc.), even inside test runners (e.g., Jest, Mocha, etc.). Each of these contexts has a unique set of capabilities, limitations, requirements, global variables, etc. that could impact or even break your package’s behavior.
