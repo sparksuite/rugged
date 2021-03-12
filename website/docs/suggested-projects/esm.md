@@ -10,16 +10,14 @@ slug: /suggested-projects/esm
 
 ## What to test
 
-Test that your package works in projects that use the ES module system (a.k.a., “ECMAScript modules”) and use ES6-style import/export syntax.
+Test that your package works in projects that use the ES module system (a.k.a., “ECMAScript modules”) and use ES6-style import/export syntax. This is especially important if your package is written and tested using the Common JS module system.
 
 ## How to set up
 
 Specify the module type in the `package.json` file:
 
-```json {4} title="test-projects/example/package.json"
+```json {2} title="test-projects/es-module-system/package.json"
 {
-    "name": "es-module-system",
-    "version": "0.0.0", 
     "type": "module",
     "scripts": {
         "test": "jest"
