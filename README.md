@@ -20,13 +20,12 @@
 
 Rugged orchestrates testing JavaScript packages across the variety of environments and contexts where it’s actually being used, with the files that will actually be published.
 
+- ⚡️ Performance design
+- 🔧 Easily configurable
 - 📦 Written entirely in TypeScript
 - 🔬 Thoroughly tested
-- ⚡️ Zero dependencies
-- 🤝 Promise-based design
 - ✨ Tiny size
-- 🌎 Works in Node.js and browsers
-- 📖 Thoroughly documented
+- 📖 Well documented
 
 ## The problem
 
