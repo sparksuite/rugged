@@ -3,7 +3,7 @@ title: Install
 slug: /
 ---
 
-Installation is simple. Just run one of the following two commands, depending on whether you’re using Yarn or npm:
+Installation is simple. First, run one of the following two commands, depending on whether you’re using Yarn or npm:
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -30,3 +30,23 @@ npm install --save-dev rugged
 
 </TabItem>
 </Tabs>
+
+Then, add `rugged` to the `package.json` file’s `test` script:
+
+```json {3} title="package.json"
+{
+    "scripts": {
+        "test": "rugged"
+    }
+}
+```
+
+If you already have a `test` script, add `&& rugged` to the end of it:
+
+```json {3} title="package.json"
+{
+    "scripts": {
+        "test": "... && rugged"
+    }
+}
+```
