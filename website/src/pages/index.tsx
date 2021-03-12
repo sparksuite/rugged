@@ -12,7 +12,9 @@ const features = [
 	{
 		title: 'Performant design',
 		imageUrl: 'img/undraw_speed_test.svg',
-		description: <>Rugged is designed to be fast and efficient out-of-the-box, with a small size and few dependencies.</>,
+		description: (
+			<>Rugged is designed to be fast and efficient out-of-the-box, with a small size and few dependencies.</>
+		),
 	},
 	{
 		title: 'Use everywhere',
@@ -85,10 +87,22 @@ const Home: React.FC = () => {
 						<div className='row' style={{ paddingTop: '2rem', maxWidth: '1100px', margin: 'auto' }}>
 							<div className='col col-12'>
 								<h1>The problem</h1>
-								
-								<p>Today, people can consume your package in many contexts—in Node.js, in a browser, in an ECMAScript module, in a Common JS module, within a library (e.g., React, Angular, etc.), with assistance from compilers/transpilers/bundlers (e.g., TypeScript, Babel, Webpack, etc.), even inside test runners (e.g., Jest, Mocha, etc.). Each of these contexts has a unique set of capabilities, limitations, requirements, global variables, etc. that could impact or even break your package’s behavior.</p>
 
-								<p>Further, testing often only occurs against the source files that are available in the repository, which is problematic in two ways… First, tools may manipulate the source code in such a way that the compiled/transpiled/bundled version behaves slightly differently than the source code. Second, misconfigurations in your <code>package.json</code> may cause necessary files to be excluded from the published version of your package.</p>
+								<p>
+									Today, people can consume your package in many contexts—in Node.js, in a browser, in an ECMAScript
+									module, in a Common JS module, within a library (e.g., React, Angular, etc.), with assistance from
+									compilers/transpilers/bundlers (e.g., TypeScript, Babel, Webpack, etc.), even inside test runners
+									(e.g., Jest, Mocha, etc.). Each of these contexts has a unique set of capabilities, limitations,
+									requirements, global variables, etc. that could impact or even break your package’s behavior.
+								</p>
+
+								<p>
+									Further, testing often only occurs against the source files that are available in the repository,
+									which is problematic in two ways… First, tools may manipulate the source code in such a way that the
+									compiled/transpiled/bundled version behaves slightly differently than the source code. Second,
+									misconfigurations in your <code>package.json</code> may cause necessary files to be excluded from the
+									published version of your package.
+								</p>
 							</div>
 						</div>
 
@@ -96,9 +110,18 @@ const Home: React.FC = () => {
 							<div className='col col-12'>
 								<h1>How Rugged helps</h1>
 
-								<p>Rugged facilitates testing your package in the environments and contexts where your package will be used, using the files that would be published (i.e., the compiled/transpiled/bundled files that are included according to your <code>package.json</code> settings).</p>
+								<p>
+									Rugged facilitates testing your package in the environments and contexts where your package will be
+									used, using the files that would be published (i.e., the compiled/transpiled/bundled files that are
+									included according to your <code>package.json</code> settings).
+								</p>
 
-								<p>You do this by creating a variety of minimal test projects that mimic what projects that use your package could look like. These test projects live in your package’s repository and simply need a <code>test</code> script in their <code>package.json</code> files. Rugged will run these scripts in each test project to verify your package works as expected in each environment/context.</p>
+								<p>
+									You do this by creating a variety of minimal test projects that mimic what projects that use your
+									package could look like. These test projects live in your package’s repository and simply need a{' '}
+									<code>test</code> script in their <code>package.json</code> files. Rugged will run these scripts in
+									each test project to verify your package works as expected in each environment/context.
+								</p>
 							</div>
 						</div>
 					</div>
@@ -108,7 +131,7 @@ const Home: React.FC = () => {
 					<div className='container'>
 						<div className='row'>
 							<div className={`col col-12 ${styles.screenRecordingCol}`}>
-								<img src={gifUrl} alt="Screen recording" className={styles.screenRecordingImg} />
+								<img src={gifUrl} alt='Screen recording' className={styles.screenRecordingImg} />
 							</div>
 						</div>
 					</div>
