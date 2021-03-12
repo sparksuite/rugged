@@ -17,7 +17,7 @@ export interface Config {
 	/** The port Yarn commands should use for the `--mutex` flag. Defaults to 31997. */
 	yarnMutexPort: number;
 
-	/** Whether to run tests in parallel */
+	/** Whether to run tests in parallel. Defaults to `true`. */
 	testInParallel: boolean;
 
 	/** Which `package.json` script to run to compile the root project. Defaults to `compile`; however, the compilation step will be skipped if the script does not exist. */

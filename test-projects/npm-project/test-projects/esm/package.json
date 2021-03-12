@@ -1,0 +1,9 @@
+{
+	"type": "module",
+	"scripts": {
+		"test": "node index.js"
+	},
+	"dependencies": {
+		"npm-project": "file:../.."
+	}
+}

@@ -6,7 +6,7 @@ import chalk from './utils/chalk';
 import glob from 'glob';
 import Listr from 'listr';
 import execa from 'execa';
-import { HandledError, PrintableError, yarnErrorCatcher } from './utils/errors';
+import { HandledError, PrintableError } from './utils/errors';
 import getConfig, { Config } from './utils/get-config';
 import verify from './utils/verify';
 import printHeader from './utils/print-header';
@@ -14,6 +14,7 @@ import installDependencies from './steps/install-dependencies';
 import injectRootPackage from './steps/inject-root-package';
 import testProjects from './steps/test-projects';
 import getContext from './utils/get-context';
+import packageManager from './utils/package-manager';
 
 // Export a type used for TypeScript config files
 type PartialConfig = Partial<Config>;
@@ -63,23 +64,27 @@ const finalResult: FinalResult = {
 			testProjectPaths.map((testProjectPath) => ({
 				title: path.basename(testProjectPath),
 				task: async () => {
-					await execa('yarn', [`--mutex`, `network:${config.yarnMutexPort}`, `remove`, context.packageFile.name], {
+					// Determine what to give execa
+					const execaInputRemove = await packageManager.remove(testProjectPath, context.packageFile.name);
+
+					// Run execa command
+					await execa(execaInputRemove.tool, execaInputRemove.args, {
 						cwd: testProjectPath,
 					}).catch((error) => {
 						if (error.toString().includes(`This module isn't specified in a package.json file`)) {
 							return;
 						}
 
-						return yarnErrorCatcher(error);
+						return packageManager.errorCatcher(error);
 					});
 
-					await execa(
-						'yarn',
-						[`add`, config.injectAsDevDependency ? `--dev` : '', `link:../..`].filter((arg) => !!arg),
-						{
-							cwd: testProjectPath,
-						}
-					).catch(yarnErrorCatcher);
+					// Determine what to give execa
+					const execaInputAdd = await packageManager.add(testProjectPath, `link:../..`);
+
+					// Run execa command
+					await execa(execaInputAdd.tool, execaInputAdd.args, {
+						cwd: testProjectPath,
+					}).catch(packageManager.errorCatcher);
 				},
 			})),
 			{
@@ -88,7 +93,11 @@ const finalResult: FinalResult = {
 			}
 		);
 
-		await tasks.run();
+		try {
+			await tasks.run();
+		} catch (error) {
+			// Ignore errors; last line is automatically printed by Listr under task
+		}
 
 		// Loop over each successful test
 		for (const successfulTest of finalResult.successfulTests) {

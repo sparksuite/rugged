@@ -11,13 +11,10 @@ describe('#getContext(true)', () => {
 	it('Skips reconstructing the context when possible', async () => {
 		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'primary'));
 
-		const config1 = await getContext(true);
+		const context1 = await getContext(true);
+		const context2 = await getContext();
 
-		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'package-missing-version'));
-
-		const config2 = await getContext();
-
-		expect(config1.packageFile.name).toStrictEqual(config2.packageFile.name);
+		expect(Object.is(context2, context1)).toBe(true);
 	});
 
 	it('Catches missing package files', async () => {
