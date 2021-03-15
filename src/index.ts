@@ -131,7 +131,7 @@ const finalResult: FinalResult = {
 	await injectRootPackage(testProjectPaths);
 	await testProjects(testProjectPaths, finalResult);
 })()
-	.catch((error) => {
+	.catch((error: Error | HandledError | PrintableError) => {
 		// Remember that we encountered an error
 		finalResult.errorEncountered = true;
 
