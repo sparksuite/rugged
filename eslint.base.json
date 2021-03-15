@@ -32,6 +32,7 @@
 			}
 		],
 		"eqeqeq": ["error"],
+		"no-implicit-coercion": ["error"],
 		"prefer-template": ["error"]
 	}
 }
