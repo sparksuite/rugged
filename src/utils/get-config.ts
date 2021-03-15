@@ -52,13 +52,13 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 
 	// Define how to validate each key
 	type Validate = {
-		[key in keyof Config]: (value: any) => boolean;
+		[key in keyof Config]: (value: unknown) => boolean;
 	};
 
 	const validate: Validate = {
 		injectAsDevDependency: (value) => typeof value === 'boolean',
 		testProjectsDirectory: (value) => typeof value === 'string' && fs.existsSync(value),
-		yarnMutexPort: (value) => Number.isInteger(value) && value > 0 && value < 65536,
+		yarnMutexPort: (value) => typeof value === 'number' && Number.isInteger(value) && value > 0 && value < 65536,
 		testInParallel: (value) => typeof value === 'boolean',
 		compileScriptName: (value) => typeof value === 'string',
 		printSuccessfulOutput: (value) => typeof value === 'boolean',
