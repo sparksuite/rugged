@@ -106,7 +106,8 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 			service.enabled(false);
 		}
 	} catch (error) {
-		const errorHasMessage = (error: unknown): error is { message: string } =>  typeof error === 'object' && error !== null &&'message' in error;
+		const errorHasMessage = (error: unknown): error is { message: string } =>
+			typeof error === 'object' && error !== null && 'message' in error;
 
 		if (!errorHasMessage(error)) {
 			throw new Error('An unexpected error occurred');
