@@ -49,11 +49,14 @@ describe('#getConfig(true)', () => {
 		try {
 			await getConfig(true);
 		} catch (e) {
-			error = e;
+			if (e instanceof Error) {
+				error = e;
+			}
 		}
 
 		expect(error).toBeInstanceOf(PrintableError);
 		expect(error).toMatchObject({
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 			message: expect.stringContaining(
 				'An error was encountered while trying to compile rugged.config.js (see below):\n\n'
 			),
@@ -68,11 +71,14 @@ describe('#getConfig(true)', () => {
 		try {
 			await getConfig(true);
 		} catch (e) {
-			error = e;
+			if (e instanceof Error) {
+				error = e;
+			}
 		}
 
 		expect(error).toBeInstanceOf(PrintableError);
 		expect(error).toMatchObject({
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 			message: expect.stringContaining(
 				'An error was encountered while trying to compile rugged.config.ts (see below):\n\n'
 			),
