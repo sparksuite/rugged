@@ -69,7 +69,9 @@ export default async function getContext(reconstruct?: true): Promise<Context> {
 			throw new PrintableError(`The ${chalk.bold('package.json')} file doesn’t appear to be an object`);
 		}
 
-		for (const requiredKey of Object.keys(validate)) {
+		const requiredKeys: ('version' | 'name')[] = ['name', 'version'];
+
+		for (const requiredKey of requiredKeys) {
 			if (!(requiredKey in packageFile)) {
 				throw new PrintableError(
 					`The ${chalk.bold('package.json')} file is missing a required key: ${chalk.bold(requiredKey)}`

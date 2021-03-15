@@ -44,12 +44,12 @@ describe('#getConfig(true)', () => {
 	it('Handles compile errors in JS config files', async () => {
 		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'js-config-compile-error'));
 
-		let error: Error | undefined = undefined;
+		let error: PrintableError | undefined = undefined;
 
 		try {
 			await getConfig(true);
 		} catch (e) {
-			if (e instanceof Error) {
+			if (e instanceof PrintableError) {
 				error = e;
 			}
 		}
@@ -66,12 +66,12 @@ describe('#getConfig(true)', () => {
 	it('Handles compile errors in TS config files', async () => {
 		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'ts-config-compile-error'));
 
-		let error: Error | undefined = undefined;
+		let error: PrintableError | undefined = undefined;
 
 		try {
 			await getConfig(true);
 		} catch (e) {
-			if (e instanceof Error) {
+			if (e instanceof PrintableError) {
 				error = e;
 			}
 		}
