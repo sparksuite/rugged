@@ -117,10 +117,12 @@ const Home: React.FC = () => {
 								</p>
 
 								<p>
-									You do this by creating a variety of minimal test projects that mimic what projects that use your
-									package could look like. These test projects live in your package’s repository and simply need a{' '}
-									<code>test</code> script in their <code>package.json</code> files. Rugged will run these scripts in
-									each test project to verify your package works as expected in each environment/context.
+									This is done by injecting the compiled &amp; packaged version of your package into a series of minimal
+									test projects you create, which mimic the various contexts in which your package could be
+									used/consumed. These test projects live in your package’s repository and simply need a{' '}
+									<code>test</code> script in their <code>package.json</code> files. Rugged will run the{' '}
+									<code>test</code> script in each test project to verify your package works as expected in each
+									environment/context.
 								</p>
 							</div>
 						</div>
