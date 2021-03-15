@@ -28,14 +28,14 @@ describe('#getContext(true)', () => {
 		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'package-missing-name'));
 
 		await expect(() => getContext(true)).rejects.toThrow(PrintableError);
-		await expect(() => getContext(true)).rejects.toThrow('The package.json is missing a name');
+		await expect(() => getContext(true)).rejects.toThrow('The package.json file is missing a required key: name');
 	});
 
 	it('Catches package files that are missing a version', async () => {
 		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'package-missing-version'));
 
 		await expect(() => getContext(true)).rejects.toThrow(PrintableError);
-		await expect(() => getContext(true)).rejects.toThrow('The package.json is missing a version');
+		await expect(() => getContext(true)).rejects.toThrow('The package.json file is missing a required key: version');
 	});
 
 	it('Returns parsed package file', async () => {
