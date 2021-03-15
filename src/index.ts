@@ -84,7 +84,7 @@ const finalResult: FinalResult = {
 					// Run execa command
 					await execa(execaInputAdd.tool, execaInputAdd.args, {
 						cwd: testProjectPath,
-					}).catch((e) => packageManager.errorCatcher(e));
+					}).catch(packageManager.errorCatcher);
 				},
 			})),
 			{
@@ -157,4 +157,4 @@ const finalResult: FinalResult = {
 			)
 		);
 	})
-	.finally(() => finishUp());
+	.finally(() => void finishUp());
