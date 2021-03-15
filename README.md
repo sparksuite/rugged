@@ -31,7 +31,7 @@ Further, testing often only occurs against the source files that are available i
 
 Rugged facilitates testing your package in the environments and contexts where your package will be used, using the files that would be published (i.e., the compiled/transpiled/bundled files that are included according to your `package.json` settings).
 
-You do this by creating a variety of minimal test projects that mimic what projects that use your package could look like. These test projects live in your package’s repository and simply need a `test` script in their `package.json` files. Rugged will run these scripts in each test project to verify your package works as expected in each environment/context.
+This is done by injecting the compiled & packaged version of your package into a series of minimal test projects you create, which mimic the various contexts in which your package could be used/consumed. These test projects live in your package’s repository and simply need a `test` script in their `package.json` files. Rugged will run the `test` script in each test project to verify your package works as expected in each environment/context.
 
 ## Quick start
 
