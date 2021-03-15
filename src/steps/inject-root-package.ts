@@ -11,7 +11,7 @@ import getContext from '../utils/get-context';
 import packageManager from '../utils/package-manager';
 
 /** Installs dependencies into the root project and test projects */
-export default async function injectRootPackage(testProjectPaths: string[]) {
+export default async function injectRootPackage(testProjectPaths: string[]): Promise<void> {
 	// Get the package file
 	const { packageFile } = await getContext();
 
