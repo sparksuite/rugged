@@ -10,12 +10,10 @@ import getConfig from '../utils/get-config';
 import getContext from '../utils/get-context';
 import packageManager from '../utils/package-manager';
 
-
 // Define what Listr Context looks like
 interface Context {
 	packagePath?: string;
 }
-
 
 /** Installs dependencies into the root project and test projects */
 export default async function injectRootPackage(testProjectPaths: string[]): Promise<void> {

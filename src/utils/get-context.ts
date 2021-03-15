@@ -59,10 +59,12 @@ export default async function getContext(reconstruct?: true): Promise<Context> {
 	const validate: { [k in keyof Required<Context['packageFile']>]: (value: unknown) => boolean } = {
 		version: (value) => typeof value === 'string',
 		name: (value) => typeof value === 'string',
-		scripts: (value) => value === undefined || typeof value === 'object', 
-	}
+		scripts: (value) => value === undefined || typeof value === 'object',
+	};
 
-	const packageFileHasRequiredKeys = (packageFile: unknown): packageFile is { [key in keyof Context['packageFile']]?: unknown } => {
+	const packageFileHasRequiredKeys = (
+		packageFile: unknown
+	): packageFile is { [key in keyof Context['packageFile']]?: unknown } => {
 		if (typeof packageFile !== 'object' || !packageFile) {
 			throw new PrintableError(`The ${chalk.bold('package.json')} file doesn’t appear to be an object`);
 		}
@@ -76,7 +78,7 @@ export default async function getContext(reconstruct?: true): Promise<Context> {
 		}
 
 		return true;
-	}
+	};
 
 	if (!packageFileHasRequiredKeys(packageFile)) {
 		throw new Error('This should be unreachable');
@@ -97,7 +99,7 @@ export default async function getContext(reconstruct?: true): Promise<Context> {
 		}
 
 		return true;
-	}
+	};
 
 	if (!packageFileHasValidValues(packageFile)) {
 		throw new Error('This should be unreachable');

@@ -97,7 +97,7 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 			service.enabled(true);
 
 			// Require it
-			const requiredConfig = require(tsPath) as { default: Config, __esModule: true } | Config;
+			const requiredConfig = require(tsPath) as { default: Config; __esModule: true } | Config;
 
 			// Interoperability between ECMAScript / Common JS modules
 			customConfig = '__esModule' in requiredConfig ? requiredConfig.default : requiredConfig;
@@ -141,7 +141,7 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 			}
 
 			return true;
-		}
+		};
 
 		if (!customConfigHasKnownKeys(customConfig)) {
 			throw new Error('This should be unreachable');
@@ -162,7 +162,7 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 			}
 
 			return true;
-		}
+		};
 
 		if (!customConfigHasValidValues(customConfig)) {
 			throw new Error('This should be unreachable');
