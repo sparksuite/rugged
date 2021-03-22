@@ -73,7 +73,7 @@ describe('#testProjects()', () => {
 		jest.dontMock('listr');
 	});
 
-	it("Runs it's tasks", async () => {
+	it("Runs its tasks", async () => {
 		const testProjects = require('./test-projects').default;
 
 		const finalResult: FinalResult = { failedTests: [], successfulTests: [], errorEncountered: false };
