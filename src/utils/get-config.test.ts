@@ -44,16 +44,19 @@ describe('#getConfig(true)', () => {
 	it('Handles compile errors in JS config files', async () => {
 		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'js-config-compile-error'));
 
-		let error: Error | undefined = undefined;
+		let error: PrintableError | undefined = undefined;
 
 		try {
 			await getConfig(true);
 		} catch (e) {
-			error = e;
+			if (e instanceof PrintableError) {
+				error = e;
+			}
 		}
 
 		expect(error).toBeInstanceOf(PrintableError);
 		expect(error).toMatchObject({
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 			message: expect.stringContaining(
 				'An error was encountered while trying to compile rugged.config.js (see below):\n\n'
 			),
@@ -63,16 +66,19 @@ describe('#getConfig(true)', () => {
 	it('Handles compile errors in TS config files', async () => {
 		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'ts-config-compile-error'));
 
-		let error: Error | undefined = undefined;
+		let error: PrintableError | undefined = undefined;
 
 		try {
 			await getConfig(true);
 		} catch (e) {
-			error = e;
+			if (e instanceof PrintableError) {
+				error = e;
+			}
 		}
 
 		expect(error).toBeInstanceOf(PrintableError);
 		expect(error).toMatchObject({
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 			message: expect.stringContaining(
 				'An error was encountered while trying to compile rugged.config.ts (see below):\n\n'
 			),

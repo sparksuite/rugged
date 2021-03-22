@@ -10,8 +10,13 @@ import getConfig from '../utils/get-config';
 import getContext from '../utils/get-context';
 import packageManager from '../utils/package-manager';
 
+// Define what Listr Context looks like
+interface Context {
+	packagePath?: string;
+}
+
 /** Installs dependencies into the root project and test projects */
-export default async function injectRootPackage(testProjectPaths: string[]) {
+export default async function injectRootPackage(testProjectPaths: string[]): Promise<void> {
 	// Get the package file
 	const { packageFile } = await getContext();
 
@@ -22,11 +27,11 @@ export default async function injectRootPackage(testProjectPaths: string[]) {
 	const config = await getConfig();
 
 	// Set up the tasks
-	const tasks = new Listr([
+	const tasks = new Listr<Context>([
 		{
 			title: `Compiling`,
-			skip: () => !Object.keys(packageFile.scripts ?? {}).includes(config.compileScriptName),
-			task: async () => {
+			skip: (): boolean => !Object.keys(packageFile.scripts ?? {}).includes(config.compileScriptName),
+			task: async (): Promise<void> => {
 				// Determine what to give execa
 				const execaInput = await packageManager.runScript(process.cwd(), config.compileScriptName);
 
@@ -36,7 +41,7 @@ export default async function injectRootPackage(testProjectPaths: string[]) {
 		},
 		{
 			title: `Packaging`,
-			task: async (ctx) => {
+			task: async (ctx): Promise<void> => {
 				// Create temporary directory
 				const tmpDir = tmp.dirSync({
 					unsafeCleanup: true,
@@ -64,11 +69,11 @@ export default async function injectRootPackage(testProjectPaths: string[]) {
 		},
 		{
 			title: 'Removing linked version',
-			task: () =>
+			task: (): Listr<Context> =>
 				new Listr(
 					testProjectPaths.map((testProjectPath) => ({
 						title: path.basename(testProjectPath),
-						task: async () => {
+						task: async (): Promise<void> => {
 							// Determine what to give execa
 							const execaInputRemove = await packageManager.remove(testProjectPath, packageFile.name);
 
@@ -106,13 +111,13 @@ export default async function injectRootPackage(testProjectPaths: string[]) {
 		},
 		{
 			title: 'Injecting packaged version',
-			task: (ctx) =>
+			task: (ctx): Listr<Context> =>
 				new Listr(
 					testProjectPaths.map((testProjectPath) => ({
 						title: path.basename(testProjectPath),
-						task: async () => {
+						task: async (): Promise<void> => {
 							// Determine what to give execa
-							const execaInput = await packageManager.add(testProjectPath, `file:${ctx.packagePath}`);
+							const execaInput = await packageManager.add(testProjectPath, `file:${ctx.packagePath ?? ''}`);
 
 							// Run execa command
 							await execa(execaInput.tool, execaInput.args, {
