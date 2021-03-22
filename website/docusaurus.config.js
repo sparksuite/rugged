@@ -10,7 +10,7 @@ module.exports = {
 	projectName: 'rugged',
 	themeConfig: {
 		navbar: {
-			title: 'Rugged',
+			title: '',
 			logo: {
 				alt: 'Logo',
 				src: 'img/logo.png',

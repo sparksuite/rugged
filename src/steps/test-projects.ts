@@ -9,7 +9,7 @@ import packageManager from '../utils/package-manager';
 import printHeader from '../utils/print-header';
 
 /** Installs dependencies into the root project and test projects */
-export default async function testProjects(testProjectPaths: string[], finalResult: FinalResult) {
+export default async function testProjects(testProjectPaths: string[], finalResult: FinalResult): Promise<void> {
 	// Get the configuration for testing in parallel
 	const { testInParallel, printSuccessfulOutput } = await getConfig();
 
@@ -20,7 +20,7 @@ export default async function testProjects(testProjectPaths: string[], finalResu
 	const tasks = new Listr(
 		testProjectPaths.map((testProjectPath) => ({
 			title: path.basename(testProjectPath),
-			task: async () => {
+			task: async (): Promise<void> => {
 				// Determine what to give execa
 				const execaInput = await packageManager.runScript(testProjectPath, 'test');
 

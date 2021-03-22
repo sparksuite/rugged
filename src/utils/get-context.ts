@@ -53,18 +53,58 @@ export default async function getContext(reconstruct?: true): Promise<Context> {
 		throw new PrintableError(`Couldn’t find ${chalk.bold('package.json')} in this directory (${process.cwd()})`);
 	}
 
-	const packageFile = require(packageFilePath);
+	const packageFile: unknown = require(packageFilePath);
 
-	if (typeof packageFile !== 'object' || !packageFile) {
-		throw new PrintableError(`The ${chalk.bold('package.json')} file doesn’t appear to be an object`);
+	// Check for required keys
+	const validate: { [k in keyof Required<Context['packageFile']>]: (value: unknown) => boolean } = {
+		version: (value) => typeof value === 'string',
+		name: (value) => typeof value === 'string',
+		scripts: (value) => value === undefined || typeof value === 'object',
+	};
+
+	const packageFileHasRequiredKeys = (
+		packageFile: unknown
+	): packageFile is { [key in keyof Context['packageFile']]?: unknown } => {
+		if (typeof packageFile !== 'object' || !packageFile) {
+			throw new PrintableError(`The ${chalk.bold('package.json')} file doesn’t appear to be an object`);
+		}
+
+		const requiredKeys: ('version' | 'name')[] = ['name', 'version'];
+
+		for (const requiredKey of requiredKeys) {
+			if (!(requiredKey in packageFile)) {
+				throw new PrintableError(
+					`The ${chalk.bold('package.json')} file is missing a required key: ${chalk.bold(requiredKey)}`
+				);
+			}
+		}
+
+		return true;
+	};
+
+	if (!packageFileHasRequiredKeys(packageFile)) {
+		throw new Error('This should be unreachable');
 	}
 
-	if (typeof packageFile.name !== 'string') {
-		throw new PrintableError(`The ${chalk.bold('package.json')} is missing a name`);
-	}
+	// Validate each key
+	const packageFileHasValidValues = (
+		packageFile: { [key in keyof Context['packageFile']]?: unknown }
+	): packageFile is Context['packageFile'] => {
+		const requiredKeys = Object.keys(validate) as (keyof Context['packageFile'])[];
 
-	if (typeof packageFile.version !== 'string') {
-		throw new PrintableError(`The ${chalk.bold('package.json')} is missing a version`);
+		for (const requiredKey of requiredKeys) {
+			if (!validate[requiredKey](packageFile[requiredKey])) {
+				throw new PrintableError(
+					`In the ${chalk.bold('package.json')} file, the ${chalk.bold(requiredKey)} key contains an invalid value`
+				);
+			}
+		}
+
+		return true;
+	};
+
+	if (!packageFileHasValidValues(packageFile)) {
+		throw new Error('This should be unreachable');
 	}
 
 	// Set context

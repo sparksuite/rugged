@@ -8,7 +8,7 @@ import packageManager from '../utils/package-manager';
 import printHeader from '../utils/print-header';
 
 /** Installs dependencies into the root project and test projects */
-export default async function installDependencies(testProjectPaths: string[]) {
+export default async function installDependencies(testProjectPaths: string[]): Promise<void> {
 	// Print section header
 	printHeader('Installing dependencies');
 
@@ -20,7 +20,7 @@ export default async function installDependencies(testProjectPaths: string[]) {
 		[
 			{
 				title: packageFile.name,
-				task: async () => {
+				task: async (): Promise<void> => {
 					// Determine what to give execa
 					const execaInput = await packageManager.installDependencies(process.cwd());
 
@@ -30,7 +30,7 @@ export default async function installDependencies(testProjectPaths: string[]) {
 			},
 			...testProjectPaths.map((testProjectPath) => ({
 				title: `Project: ${path.basename(testProjectPath)}`,
-				task: async () => {
+				task: async (): Promise<void> => {
 					// Determine what to give execa
 					const execaInput = await packageManager.installDependencies(testProjectPath);
 

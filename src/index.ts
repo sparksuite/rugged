@@ -21,7 +21,7 @@ type PartialConfig = Partial<Config>;
 export type { PartialConfig as Config };
 
 // Initialize finish function
-let finishUp = () => Promise.resolve();
+let finishUp = (): Promise<void> => Promise.resolve();
 
 // Initialize object to store the final result
 export interface FinalResult {
@@ -43,7 +43,7 @@ const finalResult: FinalResult = {
 };
 
 // Wrap everything in a self-executing async function
-(async () => {
+(async (): Promise<void> => {
 	// Get the config/context
 	const config = await getConfig();
 	const context = await getContext();
@@ -55,7 +55,7 @@ const finalResult: FinalResult = {
 	const testProjectPaths = glob.sync(`${absolutePath}/*/`);
 
 	// Define the actual finish function
-	finishUp = async () => {
+	finishUp = async (): Promise<void> => {
 		// Print section header
 		printHeader('Resetting projects');
 
@@ -63,7 +63,7 @@ const finalResult: FinalResult = {
 		const tasks = new Listr(
 			testProjectPaths.map((testProjectPath) => ({
 				title: path.basename(testProjectPath),
-				task: async () => {
+				task: async (): Promise<void> => {
 					// Determine what to give execa
 					const execaInputRemove = await packageManager.remove(testProjectPath, context.packageFile.name);
 
@@ -131,7 +131,7 @@ const finalResult: FinalResult = {
 	await injectRootPackage(testProjectPaths);
 	await testProjects(testProjectPaths, finalResult);
 })()
-	.catch((error) => {
+	.catch((error: Error | HandledError | PrintableError) => {
 		// Remember that we encountered an error
 		finalResult.errorEncountered = true;
 
@@ -157,4 +157,4 @@ const finalResult: FinalResult = {
 			)
 		);
 	})
-	.finally(() => finishUp());
+	.finally(() => void finishUp());
