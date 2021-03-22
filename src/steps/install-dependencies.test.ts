@@ -87,7 +87,7 @@ describe('#installDependencies()', () => {
 		jest.dontMock('listr');
 	});
 
-	it("Runs it's tasks", async () => {
+	it("Runs its tasks", async () => {
 		execa.mockImplementation(() => Promise.resolve());
 
 		const installDependencies = require('./install-dependencies').default;
