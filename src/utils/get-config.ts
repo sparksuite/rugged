@@ -52,13 +52,13 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 
 	// Define how to validate each key
 	type Validate = {
-		[key in keyof Config]: (value: any) => boolean;
+		[key in keyof Config]: (value: unknown) => boolean;
 	};
 
 	const validate: Validate = {
 		injectAsDevDependency: (value) => typeof value === 'boolean',
 		testProjectsDirectory: (value) => typeof value === 'string' && fs.existsSync(value),
-		yarnMutexPort: (value) => Number.isInteger(value) && value > 0 && value < 65536,
+		yarnMutexPort: (value) => typeof value === 'number' && Number.isInteger(value) && value > 0 && value < 65536,
 		testInParallel: (value) => typeof value === 'boolean',
 		compileScriptName: (value) => typeof value === 'string',
 		printSuccessfulOutput: (value) => typeof value === 'boolean',
@@ -97,15 +97,22 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 			service.enabled(true);
 
 			// Require it
-			const requiredConfig = require(tsPath);
+			const requiredConfig = require(tsPath) as { default: Config; __esModule: true } | Config;
 
 			// Interoperability between ECMAScript / Common JS modules
-			customConfig = requiredConfig?.__esModule ? requiredConfig.default : requiredConfig;
+			customConfig = '__esModule' in requiredConfig ? requiredConfig.default : requiredConfig;
 
 			// Disable the compiler
 			service.enabled(false);
 		}
 	} catch (error) {
+		const errorHasMessage = (error: unknown): error is { message: string } =>
+			typeof error === 'object' && error !== null && 'message' in error;
+
+		if (!errorHasMessage(error)) {
+			throw new Error('An unexpected error occurred');
+		}
+
 		throw new PrintableError(
 			`An error was encountered while trying to compile ${chalk.bold(configFilename)} (see below):\n\n${chalk.red(
 				error.message
@@ -115,15 +122,14 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 
 	// Handle the custom config
 	if (configFilename) {
-		// Make sure it's an object
-		if (typeof customConfig !== 'object' || customConfig === null) {
-			throw new PrintableError(`The ${chalk.bold(configFilename)} file doesn’t export an object`);
-		}
-
 		// Check for unrecognized keys
-		function customConfigHasKnownKeys(customConfig: object): customConfig is { [key in keyof Config]?: any } {
+		const customConfigHasKnownKeys = (customConfig: unknown): customConfig is { [key in keyof Config]?: unknown } => {
 			if (typeof config !== 'object') {
 				throw new Error('Config should be an object at this point');
+			}
+
+			if (typeof customConfig !== 'object' || customConfig === null) {
+				throw new PrintableError(`The ${chalk.bold(configFilename)} file doesn’t export an object`);
 			}
 
 			const allowedKeys = Object.keys(config);
@@ -138,16 +144,16 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 			}
 
 			return true;
-		}
+		};
 
 		if (!customConfigHasKnownKeys(customConfig)) {
 			throw new Error('This should be unreachable');
 		}
 
 		// Validate each key
-		function customConfigHasValidValues(
-			customConfig: { [key in keyof Config]?: any }
-		): customConfig is Partial<Config> {
+		const customConfigHasValidValues = (
+			customConfig: { [key in keyof Config]?: unknown }
+		): customConfig is Partial<Config> => {
 			for (const [untypedKey, value] of Object.entries(customConfig)) {
 				const key = untypedKey as keyof typeof customConfig;
 
@@ -159,7 +165,7 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 			}
 
 			return true;
-		}
+		};
 
 		if (!customConfigHasValidValues(customConfig)) {
 			throw new Error('This should be unreachable');
