@@ -115,7 +115,7 @@ describe('#injectRootPackage()', () => {
 		jest.dontMock('listr');
 	});
 
-	it("Runs it's tasks", async () => {
+	it("Runs its tasks", async () => {
 		execa.mockImplementation(() => Promise.resolve({ stdout: '' }));
 
 		const injectRootPackage = require('./inject-root-package').default;
