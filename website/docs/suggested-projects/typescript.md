@@ -1,5 +1,5 @@
 ---
-title: Typescript
+title: TypeScript
 slug: /suggested-projects/typescript
 ---
 
