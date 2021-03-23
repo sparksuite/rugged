@@ -9,7 +9,7 @@ slug: /suggested-projects/typescript
 
 ## What to test
 
-Test that your package works in a project using TypeScript. 
+Test that your package works in a project using TypeScript, and can be required/imported naturally.
 
 ## How to set up
 
