@@ -5,7 +5,7 @@ slug: /suggested-projects/typescript
 
 ## When to test
 
-- Your package runs in projects using TypeScript
+- Your package could be run in a project written using TypeScript. Since TypeScript is a superset of JavaScript, most, if not all, JavaScript packages will work in TypeScript projects, so this environment is highly recommended.
 
 ## What to test
 
