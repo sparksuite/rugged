@@ -17,4 +17,11 @@ Install `typescript` as a dev-dependency for the project. Afterwards you will ne
 
 ## Common problems to watch for
 
-TODO
+### Import syntax
+
+Make sure that your package can be imported successfully and without using `* as`.
+
+```js
+import yourPackage from 'your-package'; // Good
+import * as yourPackage from 'your-package'; // Bad
+```
