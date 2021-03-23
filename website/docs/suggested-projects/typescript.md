@@ -13,7 +13,7 @@ Test that your package works in a project using TypeScript.
 
 ## How to set up
 
-Install `typescript` as a dev-dependency for the project. Afterwards you will need to set up a minimal TSConfig (you can read more on those configuration options [here](https://www.typescriptlang.org/tsconfig)). Set the script you use to compile to the tool you intend to use to compile/transpile your TypeScript project into Javascript (some common examples are `tsc`/`babel` as a side note, Babel will require it's own additional [configuration](https://github.com/microsoft/TypeScript-Babel-Starter)). Lastly, in your `package.json` set the `main` configuration option to where the entry point to your project will be generated after compiling based on configuration options. There are many tools that could be used to test your project, and those tools might need additional configuration to work with TypeScript as well.
+Install `typescript` as a dev dependency for the project. Afterward, you will need to set up a minimal TSConfig file (you can read more on those configuration options [here](https://www.typescriptlang.org/tsconfig)). Set the script you use to compile to the tool you intend to use to compile/transpile your TypeScript project into JavaScript (some common examples are `tsc` and `babel`, with Babel needing additional [configuration](https://github.com/microsoft/TypeScript-Babel-Starter)). Lastly, in your `package.json` set the `main` configuration option to where the entry point to your project will be generated after compiling based on configuration options. There are many tools that could be used to test your project, and those tools might need additional configuration to work with TypeScript as well.
 
 ## Common problems to watch for
 
