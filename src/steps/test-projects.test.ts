@@ -1,4 +1,9 @@
+// Imports
+import ListrDef from 'listr';
 import { FinalResult } from '..';
+import unmockedPackageManager from '../utils/package-manager';
+import testProjectsDef from './test-projects';
+import * as Errors from '../utils/errors';
 
 // Initialize
 let getConfig: jest.Mock;
@@ -15,9 +20,9 @@ jest.mock('execa');
 describe('#testProjects()', () => {
 	beforeEach(() => {
 		jest.resetModules();
-		printHeader = require('../utils/print-header').default;
-		getConfig = require('../utils/get-config').default;
-		execa = require('execa');
+		printHeader = (require('../utils/print-header') as { default: jest.Mock }).default;
+		getConfig = (require('../utils/get-config') as { default: jest.Mock }).default;
+		execa = require('execa') as jest.Mock;
 		execa.mockImplementation(() => Promise.resolve({}));
 		getConfig.mockImplementation(() => ({
 			injectAsDevDependency: false,
@@ -28,7 +33,9 @@ describe('#testProjects()', () => {
 			printSuccessfulOutput: false,
 		}));
 
-		const packageManager = require('../utils/package-manager').default;
+		const packageManager = (require('../utils/package-manager') as {
+			default: jest.Mocked<typeof unmockedPackageManager>;
+		}).default;
 
 		packageManager.runScript.mockReturnValue(Promise.resolve({ args: [], tool: 'yarn' }));
 		packageManager.choosePackageManager.mockReturnValue(Promise.resolve('yarn'));
@@ -38,9 +45,9 @@ describe('#testProjects()', () => {
 	});
 
 	it('Prints header', async () => {
-		const testProjects = require('./test-projects').default;
+		const testProjects = (require('./test-projects') as { default: typeof testProjectsDef }).default;
 
-		await testProjects(['/example-project']), { failedTests: [], successfulTests: [], errorEncountered: false };
+		await testProjects(['/example-project'], { failedTests: [], successfulTests: [], errorEncountered: false });
 
 		expect(printHeader).toHaveBeenCalledTimes(1);
 		expect(printHeader).toHaveBeenCalledWith('Testing projects');
@@ -48,11 +55,11 @@ describe('#testProjects()', () => {
 
 	it('Creates a list of tasks', async () => {
 		jest.doMock('listr');
-		const Listr = require('listr');
+		const Listr = require('listr') as jest.MockedClass<typeof ListrDef>;
 
 		(Listr.prototype.run as jest.Mock).mockImplementation(() => Promise.resolve());
 
-		const testProjects = require('./test-projects').default;
+		const testProjects = (require('./test-projects') as { default: typeof testProjectsDef }).default;
 
 		await testProjects(['/example-project'], { failedTests: [], successfulTests: [], errorEncountered: false });
 
@@ -61,6 +68,7 @@ describe('#testProjects()', () => {
 			[
 				{
 					title: 'example-project',
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 					task: expect.any(Function),
 				},
 			],
@@ -73,8 +81,8 @@ describe('#testProjects()', () => {
 		jest.dontMock('listr');
 	});
 
-	it("Runs its tasks", async () => {
-		const testProjects = require('./test-projects').default;
+	it('Runs its tasks', async () => {
+		const testProjects = (require('./test-projects') as { default: typeof testProjectsDef }).default;
 
 		const finalResult: FinalResult = { failedTests: [], successfulTests: [], errorEncountered: false };
 
@@ -95,7 +103,7 @@ describe('#testProjects()', () => {
 			printSuccessfulOutput: true,
 		}));
 
-		const testProjects = require('./test-projects').default;
+		const testProjects = (require('./test-projects') as { default: typeof testProjectsDef }).default;
 
 		const finalResult: FinalResult = { failedTests: [], successfulTests: [], errorEncountered: false };
 
@@ -112,8 +120,8 @@ describe('#testProjects()', () => {
 	it('Gracefully handles promise rejections, and collects failed test projects with output', async () => {
 		execa.mockReturnValue(Promise.resolve({ failed: true, all: 'Example output' }));
 
-		const testProjects = require('./test-projects').default;
-		const { HandledError } = require('../utils/errors');
+		const testProjects = (require('./test-projects') as { default: typeof testProjectsDef }).default;
+		const { HandledError } = require('../utils/errors') as typeof Errors;
 
 		const finalResult: FinalResult = { failedTests: [], successfulTests: [], errorEncountered: false };
 

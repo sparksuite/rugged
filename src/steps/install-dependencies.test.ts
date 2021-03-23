@@ -1,5 +1,9 @@
 // Imports
+import ListrDef from 'listr';
 import path from 'path';
+import unmockedPackageManager from '../utils/package-manager';
+import installDependenciesDef from './install-dependencies';
+import * as Errors from '../utils/errors';
 
 // Initialize
 let getContext: jest.Mock;
@@ -16,16 +20,18 @@ jest.mock('execa');
 describe('#installDependencies()', () => {
 	beforeEach(() => {
 		jest.resetModules();
-		printHeader = require('../utils/print-header').default;
-		getContext = require('../utils/get-context').default;
-		execa = require('execa');
+		printHeader = (require('../utils/print-header') as { default: jest.Mock }).default;
+		getContext = (require('../utils/get-context') as { default: jest.Mock }).default;
+		execa = require('execa') as jest.Mock;
 		getContext.mockImplementation(() => ({
 			packageFile: {
 				name: 'example',
 			},
 		}));
 
-		const packageManager = require('../utils/package-manager').default;
+		const packageManager = (require('../utils/package-manager') as {
+			default: jest.Mocked<typeof unmockedPackageManager>;
+		}).default;
 
 		packageManager.installDependencies.mockReturnValue(Promise.resolve({ args: [], tool: 'yarn' }));
 		packageManager.choosePackageManager.mockReturnValue(Promise.resolve('yarn'));
@@ -37,7 +43,8 @@ describe('#installDependencies()', () => {
 
 	it('Prints header', async () => {
 		execa.mockImplementation(() => Promise.resolve());
-		const installDependencies = require('./install-dependencies').default;
+		const installDependencies = (require('./install-dependencies') as { default: typeof installDependenciesDef })
+			.default;
 
 		await installDependencies(['/example-project']);
 
@@ -47,7 +54,8 @@ describe('#installDependencies()', () => {
 
 	it('Retrieves the context', async () => {
 		execa.mockImplementation(() => Promise.resolve());
-		const installDependencies = require('./install-dependencies').default;
+		const installDependencies = (require('./install-dependencies') as { default: typeof installDependenciesDef })
+			.default;
 
 		await installDependencies(['/example-project']);
 
@@ -56,13 +64,14 @@ describe('#installDependencies()', () => {
 
 	it('Creates a list of tasks', async () => {
 		jest.doMock('listr');
-		const Listr = require('listr');
+		const Listr = require('listr') as jest.MockedClass<typeof ListrDef>;
 
 		execa.mockImplementation(() => Promise.resolve());
 
-		(Listr.prototype.run as jest.Mock).mockImplementation(() => Promise.resolve());
+		Listr.prototype.run.mockImplementation(() => Promise.resolve());
 
-		const installDependencies = require('./install-dependencies').default;
+		const installDependencies = (require('./install-dependencies') as { default: typeof installDependenciesDef })
+			.default;
 
 		await installDependencies(['/example-project']);
 
@@ -71,10 +80,12 @@ describe('#installDependencies()', () => {
 			[
 				{
 					title: 'example',
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 					task: expect.any(Function),
 				},
 				{
 					title: 'Project: example',
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 					task: expect.any(Function),
 				},
 			],
@@ -87,10 +98,11 @@ describe('#installDependencies()', () => {
 		jest.dontMock('listr');
 	});
 
-	it("Runs its tasks", async () => {
+	it('Runs its tasks', async () => {
 		execa.mockImplementation(() => Promise.resolve());
 
-		const installDependencies = require('./install-dependencies').default;
+		const installDependencies = (require('./install-dependencies') as { default: typeof installDependenciesDef })
+			.default;
 
 		await expect(installDependencies(['/example-project'])).resolves.not.toThrow();
 		expect(execa).toHaveBeenCalledTimes(2);
@@ -101,8 +113,9 @@ describe('#installDependencies()', () => {
 	it('Gracefully handles promise rejections', async () => {
 		execa.mockImplementation(() => Promise.reject());
 
-		const { HandledError } = require('../utils/errors');
-		const installDependencies = require('./install-dependencies').default;
+		const { HandledError } = require('../utils/errors') as typeof Errors;
+		const installDependencies = (require('./install-dependencies') as { default: typeof installDependenciesDef })
+			.default;
 
 		await expect(installDependencies(['/example-project'])).rejects.toThrow(HandledError);
 	});
