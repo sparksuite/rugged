@@ -9,6 +9,7 @@ module.exports = {
 			'suggested-projects/node',
 			'suggested-projects/browser',
 			'suggested-projects/framework',
+			'suggested-projects/typescript',
 		],
 	},
 };
