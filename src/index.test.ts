@@ -41,8 +41,8 @@ jest.spyOn(process, 'exit').mockImplementation(() => null as never);
 // Tests
 describe('Entry point', () => {
 	beforeAll(async () => {
-		await import('.')
-	})
+		await import('.');
+	});
 
 	it('Does not crash', () => {
 		expect(true).toBeTruthy();
