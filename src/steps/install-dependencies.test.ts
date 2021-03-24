@@ -1,6 +1,5 @@
 // Imports
 import ListrDef from 'listr';
-import path from 'path';
 import unmockedPackageManager from '../utils/package-manager';
 import installDependenciesDef from './install-dependencies';
 import * as Errors from '../utils/errors';
@@ -38,7 +37,6 @@ describe('#installDependencies()', () => {
 		packageManager.errorCatcher.mockImplementation(() => {
 			throw new Error();
 		});
-		jest.spyOn(path, 'basename').mockReturnValue('example');
 	});
 
 	it('Prints header', async () => {
@@ -84,7 +82,7 @@ describe('#installDependencies()', () => {
 					task: expect.any(Function),
 				},
 				{
-					title: 'Project: example',
+					title: 'Project: example-project',
 					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 					task: expect.any(Function),
 				},
