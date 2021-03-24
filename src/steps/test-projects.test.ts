@@ -105,13 +105,25 @@ describe('#testProjects()', () => {
 
 		const testProjects = (require('./test-projects') as { default: typeof testProjectsDef }).default;
 
-		const finalResult: FinalResult = { failedTests: [], successfulTests: [], errorEncountered: false };
+		let finalResult: FinalResult = { failedTests: [], successfulTests: [], errorEncountered: false };
 
 		await expect(testProjects(['/example-project'], finalResult)).resolves.not.toThrow();
 		expect(finalResult.successfulTests).toStrictEqual([
 			{
 				project: 'example-project',
 				output: 'No output...',
+			},
+		]);
+		expect(finalResult.failedTests).toStrictEqual([]);
+
+		execa.mockReturnValue(Promise.resolve({ all: 'Example output' }));
+		finalResult = { failedTests: [], successfulTests: [], errorEncountered: false };
+
+		await expect(testProjects(['/example-project'], finalResult)).resolves.not.toThrow();
+		expect(finalResult.successfulTests).toStrictEqual([
+			{
+				project: 'example-project',
+				output: 'Example output',
 			},
 		]);
 		expect(finalResult.failedTests).toStrictEqual([]);
@@ -123,7 +135,7 @@ describe('#testProjects()', () => {
 		const testProjects = (require('./test-projects') as { default: typeof testProjectsDef }).default;
 		const { HandledError } = require('../utils/errors') as typeof Errors;
 
-		const finalResult: FinalResult = { failedTests: [], successfulTests: [], errorEncountered: false };
+		let finalResult: FinalResult = { failedTests: [], successfulTests: [], errorEncountered: false };
 
 		await expect(testProjects(['/example-project'], finalResult)).rejects.toThrow(HandledError);
 
@@ -131,6 +143,20 @@ describe('#testProjects()', () => {
 			{
 				project: 'example-project',
 				output: 'Example output',
+			},
+		]);
+
+		expect(finalResult.successfulTests).toStrictEqual([]);
+
+		execa.mockReturnValue(Promise.resolve({ failed: true }));
+		finalResult = { failedTests: [], successfulTests: [], errorEncountered: false };
+
+		await expect(testProjects(['/example-project'], finalResult)).rejects.toThrow(HandledError);
+
+		expect(finalResult.failedTests).toStrictEqual([
+			{
+				project: 'example-project',
+				output: 'No output...',
 			},
 		]);
 
