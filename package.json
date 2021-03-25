@@ -17,7 +17,7 @@
 		"format": "eslint --fix --ext .js,.ts,.jsx,.tsx ./ && prettier --write '**/*.{ts,js,tsx,jsx,json,css,html,yml}'",
 		"clean": "git clean -X -d --force && find . -type d -empty -delete",
 		"precompile": "rm -rf dist/",
-		"compile": "tsc --project tsconfig.build.json",
+		"compile": "tsc --project tsconfig.build-declarations.json && tsc --project tsconfig.build.json",
 		"postcompile": "chmod +x dist/index.js"
 	},
 	"repository": {
