@@ -7,7 +7,7 @@ import getContext from './get-context';
 const testFileTreesPath = path.normalize(path.join(__dirname, '..', '..', 'test-file-trees'));
 
 // Tests
-describe('#getContext(true)', () => {
+describe('#getContext()', () => {
 	it('Skips reconstructing the context when possible', async () => {
 		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'primary'));
 

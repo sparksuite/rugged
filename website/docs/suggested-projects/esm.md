@@ -7,6 +7,8 @@ slug: /suggested-projects/esm
 
 - Your package runs in Node.js
 - Your package is expected to be imported/required by projects
+- Your package uses a conditional export for the ES module system
+  - Via the `exports` key in the `package.json` file
 
 ## What to test
 
@@ -27,13 +29,54 @@ Specify the module type in the `package.json` file:
 
 ## Common problems to watch for
 
-### Import syntax
+### External import syntax
 
 Make sure that your package can be imported successfully and without using `* as`.
 
 ```js
 import yourPackage from 'your-package'; // Good
 import * as yourPackage from 'your-package'; // Bad
+```
+
+### Internal import syntax
+
+This is especially important if you’re using a compiler/transpiler like TypeScript. Make sure that internal imports don’t throw `ERR_MODULE_NOT_FOUND` errors.
+
+Consider the following two TypeScript files:
+
+```ts title="./bar.ts"
+export default function bar() {
+    return 'bar';
+}
+```
+
+```ts title="./foo.ts"
+import bar from './bar';
+bar();
+```
+
+Consider also the following configuration directives:
+
+```json {3-4} title="tsconfig.json"
+{
+	"compilerOptions": {
+		"module": "ESNext",
+		"target": "ES2020"
+	}
+}
+```
+
+```json {2} title="package.json"
+{
+	"type": "module",
+}
+```
+
+If you run tests directly against the TypeScript source files with a test runner like Jest, chances are your tests will pass. But, when you run the compiled version, you may encounter `ERR_MODULE_NOT_FOUND` errors stating that the `./bar` file can't be found. To fix this (in this scenario), you must add `.js` to the end of every import path:
+
+```ts {1} title="./foo.ts"
+import bar from './bar.js';
+bar();
 ```
 
 ### Use of `require()`

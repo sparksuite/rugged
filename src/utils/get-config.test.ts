@@ -7,7 +7,7 @@ import getConfig from './get-config';
 const testFileTreesPath = path.normalize(path.join(__dirname, '..', '..', 'test-file-trees'));
 
 // Tests
-describe('#getConfig(true)', () => {
+describe('#getConfig()', () => {
 	it('Handles no config file', async () => {
 		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'no-config'));
 
