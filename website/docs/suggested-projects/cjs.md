@@ -7,6 +7,8 @@ slug: /suggested-projects/cjs
 
 - Your package runs in Node.js
 - Your package is expected to be imported/required by projects
+- Your package uses a conditional export for the Common JS module system
+  - Via the `exports` key in the `package.json` file
 
 ## What to test
 
