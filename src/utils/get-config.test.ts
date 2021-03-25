@@ -99,12 +99,103 @@ describe('#getConfig(true)', () => {
 		await expect(() => getConfig(true)).rejects.toThrow('The rugged.config.js file contains an unrecognized key: fake');
 	});
 
-	it('Handles invalid config key values', async () => {
-		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'invalid-config-value'));
+	it('Handles invalid compileScriptName configuration', async () => {
+		jest
+			.spyOn(process, 'cwd')
+			.mockReturnValue(path.join(testFileTreesPath, 'invalid-config-value', 'compile-script-name'));
+
+		await expect(() => getConfig(true)).rejects.toThrow(PrintableError);
+		await expect(() => getConfig(true)).rejects.toThrow(
+			'In the rugged.config.js file, the compileScriptName key contains an invalid value'
+		);
+	});
+
+	it('Handles invalid injectAsDevDependency configuration', async () => {
+		jest
+			.spyOn(process, 'cwd')
+			.mockReturnValue(path.join(testFileTreesPath, 'invalid-config-value', 'inject-as-dev-dependency'));
 
 		await expect(() => getConfig(true)).rejects.toThrow(PrintableError);
 		await expect(() => getConfig(true)).rejects.toThrow(
 			'In the rugged.config.js file, the injectAsDevDependency key contains an invalid value'
+		);
+	});
+
+	it('Handles invalid printSuccessfulOutput configuration', async () => {
+		jest
+			.spyOn(process, 'cwd')
+			.mockReturnValue(path.join(testFileTreesPath, 'invalid-config-value', 'print-successful-output'));
+
+		await expect(() => getConfig(true)).rejects.toThrow(PrintableError);
+		await expect(() => getConfig(true)).rejects.toThrow(
+			'In the rugged.config.js file, the printSuccessfulOutput key contains an invalid value'
+		);
+	});
+
+	it('Handles invalid testInParallel configuration', async () => {
+		jest
+			.spyOn(process, 'cwd')
+			.mockReturnValue(path.join(testFileTreesPath, 'invalid-config-value', 'test-in-parallel'));
+
+		await expect(() => getConfig(true)).rejects.toThrow(PrintableError);
+		await expect(() => getConfig(true)).rejects.toThrow(
+			'In the rugged.config.js file, the testInParallel key contains an invalid value'
+		);
+	});
+
+	it('Handles invalid testProjectsDirectory configuration', async () => {
+		jest
+			.spyOn(process, 'cwd')
+			.mockReturnValue(path.join(testFileTreesPath, 'invalid-config-value', 'test-projects-directory'));
+
+		await expect(() => getConfig(true)).rejects.toThrow(PrintableError);
+		await expect(() => getConfig(true)).rejects.toThrow(
+			'In the rugged.config.js file, the testProjectsDirectory key contains an invalid value'
+		);
+
+		jest
+			.spyOn(process, 'cwd')
+			.mockReturnValue(path.join(testFileTreesPath, 'invalid-config-value', 'non-existent-test-projects-directory'));
+
+		await expect(() => getConfig(true)).rejects.toThrow(PrintableError);
+		await expect(() => getConfig(true)).rejects.toThrow(
+			'In the rugged.config.js file, the testProjectsDirectory key contains an invalid value'
+		);
+	});
+
+	it('Handles invalid yarnMutexPort configuration', async () => {
+		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'invalid-config-value', 'yarn-mutex-port'));
+
+		await expect(() => getConfig(true)).rejects.toThrow(PrintableError);
+		await expect(() => getConfig(true)).rejects.toThrow(
+			'In the rugged.config.js file, the yarnMutexPort key contains an invalid value'
+		);
+
+		jest
+			.spyOn(process, 'cwd')
+			.mockReturnValue(path.join(testFileTreesPath, 'invalid-config-value', 'non-integer-yarn-mutex-port'));
+
+		await expect(() => getConfig(true)).rejects.toThrow(PrintableError);
+		await expect(() => getConfig(true)).rejects.toThrow(
+			'In the rugged.config.js file, the yarnMutexPort key contains an invalid value'
+		);
+
+		jest
+			.spyOn(process, 'cwd')
+			.mockReturnValue(path.join(testFileTreesPath, 'invalid-config-value', 'port-number-too-high-yarn-mutex-port'));
+
+		await expect(() => getConfig(true)).rejects.toThrow(PrintableError);
+		await expect(() => getConfig(true)).rejects.toThrow(
+			'In the rugged.config.js file, the yarnMutexPort key contains an invalid value'
+		);
+
+		jest
+			.spyOn(process, 'cwd')
+			.mockReturnValue(path.join(testFileTreesPath, 'invalid-config-value', 'port-number-too-low-yarn-mutex-port'));
+
+		await expect(() => getConfig(true)).rejects.toThrow(PrintableError);
+		await expect(() => getConfig(true)).rejects.toThrow(
+			'In the rugged.config.js file, the yarnMutexPort key contains an invalid value'
 		);
 	});
 });

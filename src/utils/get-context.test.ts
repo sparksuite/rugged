@@ -24,6 +24,33 @@ describe('#getContext(true)', () => {
 		await expect(() => getContext(true)).rejects.toThrow('Couldn’t find package.json in this directory');
 	});
 
+	it('Catches package files that have an invalid name value', async () => {
+		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'package-invalid-name'));
+
+		await expect(() => getContext(true)).rejects.toThrow(PrintableError);
+		await expect(() => getContext(true)).rejects.toThrow(
+			'In the package.json file, the name key contains an invalid value'
+		);
+	});
+
+	it('Catches package files that have an invalid version value', async () => {
+		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'package-invalid-version'));
+
+		await expect(() => getContext(true)).rejects.toThrow(PrintableError);
+		await expect(() => getContext(true)).rejects.toThrow(
+			'In the package.json file, the version key contains an invalid value'
+		);
+	});
+
+	it('Catches package files that have an invalid scripts value', async () => {
+		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'package-invalid-scripts'));
+
+		await expect(() => getContext(true)).rejects.toThrow(PrintableError);
+		await expect(() => getContext(true)).rejects.toThrow(
+			'In the package.json file, the scripts key contains an invalid value'
+		);
+	});
+
 	it('Catches package files that are missing a name', async () => {
 		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'package-missing-name'));
 
