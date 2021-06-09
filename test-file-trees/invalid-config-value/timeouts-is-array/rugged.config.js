@@ -1,5 +1,5 @@
 module.exports = {
 	timeouts: {
-		test: -1,
+		test: [],
 	},
 };
