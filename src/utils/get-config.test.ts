@@ -206,5 +206,12 @@ describe('#getConfig()', () => {
 		await expect(() => getConfig(true)).rejects.toThrow(
 			'In the rugged.config.js file, the timeouts key contains an invalid value'
 		);
+
+		jest.spyOn(process, 'cwd').mockReturnValue(path.join(testFileTreesPath, 'invalid-config-value', 'timeouts-is-null'));
+
+		await expect(() => getConfig(true)).rejects.toThrow(PrintableError);
+		await expect(() => getConfig(true)).rejects.toThrow(
+			'In the rugged.config.js file, the timeouts key contains an invalid value'
+		);
 	});
 });
