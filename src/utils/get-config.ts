@@ -27,9 +27,9 @@ export interface Config {
 	printSuccessfulOutput: boolean;
 
 	/** How long to wait before timing out, values are represented in milliseconds. Defaults to thirty seconds. */
-	timeouts: { 
+	timeouts: {
 		// Time before the test command times out.
-		test: number 
+		test: number;
 	};
 }
 
@@ -53,7 +53,7 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 		printSuccessfulOutput: false,
 		timeouts: {
 			test: 30000,
-		}
+		},
 	};
 
 	// Initialize custom config
@@ -71,7 +71,11 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 		testInParallel: (value) => typeof value === 'boolean',
 		compileScriptName: (value) => typeof value === 'string',
 		printSuccessfulOutput: (value) => typeof value === 'boolean',
-		timeouts: (value) => typeof value === 'object' && value !== null && !Array.isArray(value) && Object.values(value).every((timeout) => Number.isInteger(timeout) && Math.sign(timeout) !== -1),
+		timeouts: (value) =>
+			typeof value === 'object' &&
+			value !== null &&
+			!Array.isArray(value) &&
+			Object.values(value).every((timeout) => Number.isInteger(timeout) && Math.sign(timeout) !== -1),
 	};
 
 	// Initialize paths to possible config files
