@@ -65,20 +65,26 @@ const packageManager = {
 	},
 
 	/** Install dependencies at a particular path */
-	async installDependencies(absolutePath: string): Promise<ExecaInput> {
+	async installDependencies(absolutePath: string, frozen?: true): Promise<ExecaInput> {
 		// Get config
 		const config = await getConfig();
 
 		// Handle based on the package manager
 		if ((await packageManager.choosePackageManager(absolutePath)) === 'yarn') {
+			const args = [`--mutex`, `network:${config.yarnMutexPort}`, `install`, `--prefer-offline`];
+
+			if (frozen) {
+				args.push('--frozen-lockfile');
+			}
+
 			return {
 				tool: 'yarn',
-				args: [`--mutex`, `network:${config.yarnMutexPort}`, `install`, `--prefer-offline`],
+				args,
 			};
 		} else {
 			return {
 				tool: 'npm',
-				args: [`install`, `--prefer-offline`],
+				args: [frozen ? `ci` : `install`, `--prefer-offline`],
 			};
 		}
 	},
