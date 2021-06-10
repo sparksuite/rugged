@@ -89,12 +89,7 @@ describe('#testProjects()', () => {
 
 		await expect(testProjects(['/example-project'], finalResult)).resolves.not.toThrow();
 		expect(execa).toHaveBeenCalledTimes(1);
-		expect(execa).toHaveBeenCalledWith('yarn', [], {
-			cwd: '/example-project',
-			all: true,
-			reject: false,
-			timeout: 30000,
-		});
+		expect(execa).toHaveBeenCalledWith('yarn', [], { cwd: '/example-project', all: true, reject: false, timeout: 30000, });
 		expect(finalResult.successfulTests).toStrictEqual([]);
 		expect(finalResult.failedTests).toStrictEqual([]);
 	});
