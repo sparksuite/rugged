@@ -31,6 +31,7 @@ describe('#testProjects()', () => {
 			testInParallel: true,
 			compileScriptName: 'compile',
 			printSuccessfulOutput: false,
+			timeouts: { test: 30000 },
 		}));
 
 		const packageManager = (require('../utils/package-manager') as {
@@ -88,7 +89,7 @@ describe('#testProjects()', () => {
 
 		await expect(testProjects(['/example-project'], finalResult)).resolves.not.toThrow();
 		expect(execa).toHaveBeenCalledTimes(1);
-		expect(execa).toHaveBeenCalledWith('yarn', [], { cwd: '/example-project', all: true, reject: false });
+		expect(execa).toHaveBeenCalledWith('yarn', [], { cwd: '/example-project', all: true, reject: false, timeout: 30000, });
 		expect(finalResult.successfulTests).toStrictEqual([]);
 		expect(finalResult.failedTests).toStrictEqual([]);
 	});
@@ -101,6 +102,7 @@ describe('#testProjects()', () => {
 			testInParallel: true,
 			compileScriptName: 'compile',
 			printSuccessfulOutput: true,
+			timeouts: { test: 30000 },
 		}));
 
 		const testProjects = (require('./test-projects') as { default: typeof testProjectsDef }).default;
