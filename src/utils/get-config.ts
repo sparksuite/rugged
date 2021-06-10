@@ -71,7 +71,7 @@ export default async function getConfig(reconstruct?: true): Promise<Config> {
 		testInParallel: (value) => typeof value === 'boolean',
 		compileScriptName: (value) => typeof value === 'string',
 		printSuccessfulOutput: (value) => typeof value === 'boolean',
-		timeouts: (value) => typeof value === 'object' && value !== null && !Array.isArray(value),
+		timeouts: (value) => typeof value === 'object' && value !== null && !Array.isArray(value) && Object.values(value).every((timeout) => Number.isInteger(timeout)),
 	};
 
 	// Initialize paths to possible config files
