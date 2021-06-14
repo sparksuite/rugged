@@ -42,6 +42,7 @@ const lockfile = {
 		// Copy file
 		fs.copyFileSync(from, to);
 	},
+
 	/** Function that retrieves a temporary copy of a lockfile if it exists, and overwrites the lockfile at the provided path */
 	overwrite: (absolutePath: string): void => {
 		// Throw if a temporary directory has not been created
