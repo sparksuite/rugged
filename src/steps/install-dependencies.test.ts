@@ -13,7 +13,7 @@ let execa: jest.Mock;
 jest.mock('../utils/print-header');
 jest.mock('../utils/get-context');
 jest.mock('../utils/package-manager');
-jest.mock('../utils/lockfile-manager');
+jest.mock('../utils/lockfile');
 jest.mock('execa');
 
 // Tests
