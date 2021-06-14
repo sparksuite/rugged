@@ -3,11 +3,13 @@ import tmp from 'tmp';
 import fs from 'fs';
 import path from 'path';
 
-/** Helper functions to preserve a lockfile */
+// Keep temporary directory in memory
 let tempDirectory: string | null = null;
 
-const lockfileManager = {
-	storeLockfile: (absolutePath: string): void => {
+/** Helper functions to preserve a lockfile */
+const lockfile = {
+	/** Function that stores a temporary copy of a lockfile */
+	store: (absolutePath: string): void => {
 		// If the temp directory has not been created, create it
 		if (tempDirectory === null) {
 			tempDirectory = tmp.dirSync({
@@ -40,7 +42,8 @@ const lockfileManager = {
 		// Copy file
 		fs.copyFileSync(from, to);
 	},
-	overwriteLockfile: (absolutePath: string): void => {
+	/** Function that retrieves a temporary copy of a lockfile if it exists, and overwrites the lockfile at the provided path */
+	overwrite: (absolutePath: string): void => {
 		// Throw if a temporary directory has not been created
 		if (tempDirectory === null) {
 			throw new Error('A temporary directory should exist if `overwriteLockfile` is called');
@@ -68,4 +71,4 @@ const lockfileManager = {
 	},
 };
 
-export default lockfileManager;
+export default lockfile;

@@ -4,7 +4,7 @@ import Listr from 'listr';
 import path from 'path';
 import { HandledError } from '../utils/errors';
 import getContext from '../utils/get-context';
-import lockfileManager from '../utils/lockfile-manager';
+import lockfile from '../utils/lockfile';
 import packageManager from '../utils/package-manager';
 import printHeader from '../utils/print-header';
 
@@ -32,8 +32,8 @@ export default async function installDependencies(testProjectPaths: string[]): P
 			...testProjectPaths.map((testProjectPath) => ({
 				title: `Project: ${path.basename(testProjectPath)}`,
 				task: async (): Promise<void> => {
-					// Store the package-json and lockfile for later restoration
-					lockfileManager.storeLockfile(testProjectPath);
+					// Store the lockfile for later restoration
+					lockfile.store(testProjectPath);
 
 					// Determine what to give execa
 					const execaInput = await packageManager.installDependencies(testProjectPath);

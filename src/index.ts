@@ -15,7 +15,7 @@ import injectRootPackage from './steps/inject-root-package';
 import testProjects from './steps/test-projects';
 import getContext from './utils/get-context';
 import packageManager from './utils/package-manager';
-import lockfileManager from './utils/lockfile-manager';
+import lockfile from './utils/lockfile';
 
 // Export a type used for TypeScript config files
 type PartialConfig = Partial<Config>;
@@ -87,8 +87,8 @@ const finalResult: FinalResult = {
 						cwd: testProjectPath,
 					}).catch(packageManager.errorCatcher);
 
-					// Restore the lock-file
-					lockfileManager.overwriteLockfile(testProjectPath);
+					// Restore the lockfile
+					lockfile.overwrite(testProjectPath);
 
 					// Determine what to give execa
 					const execaInstallInput = await packageManager.installDependencies(testProjectPath, true);
