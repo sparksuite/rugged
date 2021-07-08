@@ -43,6 +43,15 @@ const finalResult: FinalResult = {
 	successfulTests: [],
 };
 
+// Promise that will resolve after `finishUp` is called
+let resolveAfterFinishUp: () => void;
+
+const promise = new Promise<void>((resolve) => { 
+	resolveAfterFinishUp = resolve;
+});
+
+export default promise;
+
 // Wrap everything in a self-executing async function
 (async (): Promise<void> => {
 	// Get the config/context
@@ -145,6 +154,9 @@ const finalResult: FinalResult = {
 		if (finalResult.errorEncountered || finalResult.failedTests.length) {
 			process.exit(1);
 		}
+
+		// Resolve
+		resolveAfterFinishUp();
 	};
 
 	// Trigger each step
