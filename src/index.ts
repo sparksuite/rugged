@@ -46,7 +46,7 @@ const finalResult: FinalResult = {
 // Promise that will resolve after `finishUp` is called
 let resolveAfterFinishUp: () => void;
 
-const promise = new Promise<void>((resolve) => { 
+const promise = new Promise<void>((resolve) => {
 	resolveAfterFinishUp = resolve;
 });
 
@@ -119,7 +119,6 @@ export default promise;
 		} catch (error) {
 			// Ignore errors; last line is automatically printed by Listr under task
 		}
-
 
 		// Determine what to give execa
 		const execaInstallInput = await packageManager.installDependencies(process.cwd(), true);
