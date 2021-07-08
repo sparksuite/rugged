@@ -74,7 +74,7 @@ const packageManager = {
 			const args = [`--mutex`, `network:${config.yarnMutexPort}`, `install`, `--prefer-offline`];
 
 			if (frozen) {
-				args.push('--frozen-lockfile');
+				args.push('--frozen-lockfile', `--force`);
 			}
 
 			return {
