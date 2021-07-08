@@ -111,6 +111,15 @@ const finalResult: FinalResult = {
 			// Ignore errors; last line is automatically printed by Listr under task
 		}
 
+
+		// Determine what to give execa
+		const execaInstallInput = await packageManager.installDependencies(process.cwd(), true);
+
+		// Run execa command
+		await execa(execaInstallInput.tool, execaInstallInput.args, {
+			cwd: process.cwd(),
+		}).catch(packageManager.errorCatcher);
+
 		// Loop over each successful test
 		for (const successfulTest of finalResult.successfulTests) {
 			// Print section header
