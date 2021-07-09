@@ -15,6 +15,7 @@ import injectRootPackage from './steps/inject-root-package';
 import testProjects from './steps/test-projects';
 import getContext from './utils/get-context';
 import packageManager from './utils/package-manager';
+import lockfile from './utils/lockfile';
 
 // Export a type used for TypeScript config files
 type PartialConfig = Partial<Config>;
@@ -41,6 +42,15 @@ const finalResult: FinalResult = {
 	failedTests: [],
 	successfulTests: [],
 };
+
+// Promise that will resolve after `finishUp` is called
+let resolveAfterFinishUp: () => void;
+
+const promise = new Promise<void>((resolve) => {
+	resolveAfterFinishUp = resolve;
+});
+
+export default promise;
 
 // Wrap everything in a self-executing async function
 (async (): Promise<void> => {
@@ -85,6 +95,17 @@ const finalResult: FinalResult = {
 					await execa(execaInputAdd.tool, execaInputAdd.args, {
 						cwd: testProjectPath,
 					}).catch(packageManager.errorCatcher);
+
+					// Restore the lockfile
+					lockfile.overwrite(testProjectPath);
+
+					// Determine what to give execa
+					const execaInstallInput = await packageManager.installDependencies(testProjectPath, true);
+
+					// Run execa command
+					await execa(execaInstallInput.tool, execaInstallInput.args, {
+						cwd: testProjectPath,
+					}).catch(packageManager.errorCatcher);
 				},
 			})),
 			{
@@ -98,6 +119,14 @@ const finalResult: FinalResult = {
 		} catch (error) {
 			// Ignore errors; last line is automatically printed by Listr under task
 		}
+
+		// Determine what to give execa
+		const execaInstallInput = await packageManager.installDependencies(process.cwd(), true);
+
+		// Run execa command
+		await execa(execaInstallInput.tool, execaInstallInput.args, {
+			cwd: process.cwd(),
+		}).catch(packageManager.errorCatcher);
 
 		// Loop over each successful test
 		for (const successfulTest of finalResult.successfulTests) {
@@ -124,6 +153,9 @@ const finalResult: FinalResult = {
 		if (finalResult.errorEncountered || finalResult.failedTests.length) {
 			process.exit(1);
 		}
+
+		// Resolve
+		resolveAfterFinishUp();
 	};
 
 	// Trigger each step
