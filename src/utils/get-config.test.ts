@@ -198,4 +198,51 @@ describe('#getConfig()', () => {
 			'In the rugged.config.js file, the yarnMutexPort key contains an invalid value'
 		);
 	});
+
+	it('Handles invalid timeouts configuration', async () => {
+		jest
+			.spyOn(process, 'cwd')
+			.mockReturnValue(path.join(testFileTreesPath, 'invalid-config-value', 'timeouts-is-not-object'));
+
+		await expect(() => getConfig(true)).rejects.toThrow(PrintableError);
+		await expect(() => getConfig(true)).rejects.toThrow(
+			'In the rugged.config.js file, the timeouts key contains an invalid value'
+		);
+
+		jest
+			.spyOn(process, 'cwd')
+			.mockReturnValue(path.join(testFileTreesPath, 'invalid-config-value', 'timeouts-is-null'));
+
+		await expect(() => getConfig(true)).rejects.toThrow(PrintableError);
+		await expect(() => getConfig(true)).rejects.toThrow(
+			'In the rugged.config.js file, the timeouts key contains an invalid value'
+		);
+
+		jest
+			.spyOn(process, 'cwd')
+			.mockReturnValue(path.join(testFileTreesPath, 'invalid-config-value', 'timeouts-is-array'));
+
+		await expect(() => getConfig(true)).rejects.toThrow(PrintableError);
+		await expect(() => getConfig(true)).rejects.toThrow(
+			'In the rugged.config.js file, the timeouts key contains an invalid value'
+		);
+
+		jest
+			.spyOn(process, 'cwd')
+			.mockReturnValue(path.join(testFileTreesPath, 'invalid-config-value', 'timeouts-value-not-integer'));
+
+		await expect(() => getConfig(true)).rejects.toThrow(PrintableError);
+		await expect(() => getConfig(true)).rejects.toThrow(
+			'In the rugged.config.js file, the timeouts key contains an invalid value'
+		);
+
+		jest
+			.spyOn(process, 'cwd')
+			.mockReturnValue(path.join(testFileTreesPath, 'invalid-config-value', 'timeouts-value-not-positive-integer'));
+
+		await expect(() => getConfig(true)).rejects.toThrow(PrintableError);
+		await expect(() => getConfig(true)).rejects.toThrow(
+			'In the rugged.config.js file, the timeouts key contains an invalid value'
+		);
+	});
 });
