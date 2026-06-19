@@ -47,6 +47,7 @@ describe('#injectRootPackage()', () => {
 			testInParallel: true,
 			compileScriptName: 'compile',
 			printSuccessfulOutput: false,
+			timeouts: { test: 30000 },
 		}));
 		const tmp = require('tmp') as jest.Mocked<typeof tmpDef>;
 
