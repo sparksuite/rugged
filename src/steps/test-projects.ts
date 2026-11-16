@@ -11,7 +11,7 @@ import printHeader from '../utils/print-header';
 /** Installs dependencies into the root project and test projects */
 export default async function testProjects(testProjectPaths: string[], finalResult: FinalResult): Promise<void> {
 	// Get the configuration for testing in parallel
-	const { testInParallel, printSuccessfulOutput } = await getConfig();
+	const { testInParallel, printSuccessfulOutput, timeouts } = await getConfig();
 
 	// Print section header
 	printHeader('Testing projects');
@@ -29,6 +29,7 @@ export default async function testProjects(testProjectPaths: string[], finalResu
 					cwd: testProjectPath,
 					all: true,
 					reject: false,
+					timeout: timeouts.test,
 				});
 
 				// Check for failure
